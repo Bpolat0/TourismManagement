@@ -68,7 +68,8 @@ NOT : GELİŞTİME SÜRECİ DEVAM ETMEKTEDİR.
 ```sql
 CREATE TABLE `board_types`(
     `id`              int(11) NOT NULL,
-    `board_type_name` varchar(255) NOT NULL
+    `board_type_name` varchar(255) NOT NULL,
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
 ### Sample Data Insertion for Hotel Table
@@ -80,7 +81,7 @@ VALUES (1, 'Ultra Herşey Dahil'),
        (4, 'Tam Pansiyon'),
        (5, 'Yarım Pansiyon'),
        (6, 'Sadece Yatak'),
-       (7, 'Alkol Hariç Full credit'),
+       (7, 'Alkol Hariç Full credit')
 
 ```
 
@@ -110,7 +111,8 @@ CREATE TABLE `hotels` (
   `fullBoard` tinyint(1) NOT NULL,
   `halfBoard` tinyint(1) NOT NULL,
   `roomOnly` tinyint(1) NOT NULL,
-  `nonAlcoholFull` tinyint(1) NOT NULL
+  `nonAlcoholFull` tinyint(1) NOT NULL,
+   PRIMARY KEY (`id`) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
 ### Sample Data Insertion for Hotel Table
@@ -127,7 +129,10 @@ CREATE TABLE `hotel_boardtypes`
 (
     `id`            int(11) NOT NULL,
     `hotel_id`      int(11) DEFAULT NULL,
-    `board_type_id` int(11) NOT NULL
+    `board_type_id` int(11) NOT NULL,
+     PRIMARY KEY (`id`),
+     FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+     FOREIGN KEY (`board_type_id`) REFERENCES `board_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
 ### Sample Data Insertion for Room Table
@@ -147,7 +152,9 @@ CREATE TABLE `periods`
     `period_id`  int(11) NOT NULL,
     `hotel_id`   int(11) DEFAULT NULL,
     `start_date` date NOT NULL,
-    `end_date`   date NOT NULL
+    `end_date`   date NOT NULL,
+    PRIMARY KEY (`period_id`),
+    CONSTRAINT `periods_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ```
@@ -178,7 +185,12 @@ CREATE TABLE `rooms`
     `game_console`   tinyint(1) NOT NULL,
     `safe`           tinyint(1) NOT NULL,
     `projection`     tinyint(1) NOT NULL,
-    `board_type_id`  int(11) DEFAULT NULL
+    `board_type_id`  int(11) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `rooms_ibfk_1` (`hotel_id`),
+    KEY `rooms_ibfk_2` (`board_type_id`),
+    CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `rooms_ibfk_2` FOREIGN KEY (`board_type_id`) REFERENCES `board_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
 ### Sample Data Insertion for Room Table
@@ -199,7 +211,11 @@ CREATE TABLE `pricelist`
     `board_type_id` int(11) DEFAULT NULL,
     `period_id`     int(11) DEFAULT NULL,
     `adult_price`   decimal(10, 2) DEFAULT NULL,
-    `child_price`   decimal(10, 2) DEFAULT NULL
+    `child_price`   decimal(10, 2) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`board_type_id`) REFERENCES `board_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`period_id`) REFERENCES `periods` (`period_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ```
@@ -223,7 +239,12 @@ CREATE TABLE `reservations`
     `end_date`       date           NOT NULL,
     `customer_name`  varchar(100)   NOT NULL,
     `customer_email` varchar(100)   NOT NULL,
-    `total_price`    decimal(10, 2) NOT NULL
+    `total_price`    decimal(10, 2) NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `reservations_ibfk_1` (`hotel_id`),
+    KEY `reservations_ibfk_2` (`room_id`),
+    CONSTRAINT `reservations_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `reservations_ibfk_2` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
 ### Sample Data Insertion for Room Table
