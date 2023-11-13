@@ -7,7 +7,6 @@ import com.tourismmanagement.Helper.Config;
 import com.tourismmanagement.Helper.Helper;
 import com.tourismmanagement.Model.User;
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
@@ -30,6 +29,7 @@ public class HomePageGUI extends JFrame {
     private JPanel pnl_customer_list;
     private JButton btn_logout;
     private JButton btn_change_theme;
+    private JButton çıkışButton;
 
     public HomePageGUI(User user) {
 
@@ -118,6 +118,7 @@ public class HomePageGUI extends JFrame {
                 });
             }
         });
+        çıkışButton.addActionListener(e -> dispose());
     }
     public void paintComponents(Graphics grphcs) {
         Graphics2D g2 = (Graphics2D) grphcs.create();
@@ -148,27 +149,27 @@ public class HomePageGUI extends JFrame {
         }
     }
 
-    private static class RoundedBorder implements Border {
-
-        private int radius;
-
-        RoundedBorder(int radius) {
-            this.radius = radius;
-        }
-
-        @Override
-        public Insets getBorderInsets(Component c) {
-            return new Insets(this.radius + 1, this.radius + 1, this.radius + 2, this.radius);
-        }
-
-        @Override
-        public boolean isBorderOpaque() {
-            return true;
-        }
-
-        @Override
-        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-            g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
-        }
-    }
+//    private static class RoundedBorder implements Border { TODO: RoundedBorderTest
+//
+//        private int radius;
+//
+//        RoundedBorder(int radius) {
+//            this.radius = radius;
+//        }
+//
+//        @Override
+//        public Insets getBorderInsets(Component c) {
+//            return new Insets(this.radius + 1, this.radius + 1, this.radius + 2, this.radius);
+//        }
+//
+//        @Override
+//        public boolean isBorderOpaque() {
+//            return true;
+//        }
+//
+//        @Override
+//        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+//            g.drawRoundRect(x, y, width - 1, height - 1, radius, radius);
+//        }
+//    } TODO: RoundedBorderTest
 }

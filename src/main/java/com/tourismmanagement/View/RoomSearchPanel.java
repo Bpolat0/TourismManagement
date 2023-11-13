@@ -68,6 +68,7 @@ public class RoomSearchPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 performRoomSearch();
             }
+
         });
 
         customerNameTextField = new JTextField(15);
@@ -216,6 +217,9 @@ class RoomSearch {
                     reserveButton.addActionListener(e -> {
                         reserveRoom(roomInfo.get("Room Number"), startDate, endDate, roomListPanel, adultCount, childCount, customerName, customerEmail);
                         JOptionPane.showMessageDialog(roomListPanel, "Room Reserved!\nRoom ID: " + roomInfo.get("Room Number") + "\nStart Date: " + startDate + "\nEnd Date: " + endDate);
+                        roomPanel.removeAll();
+                        roomPanel.revalidate();
+                        roomPanel.repaint();
                     });
 
                     roomPanel.add(reserveButton);
@@ -239,7 +243,7 @@ class RoomSearch {
             }
         }
 
-        roomListPanel.revalidate(); // Refresh the roomListPanel to reflect changes
+        roomListPanel.revalidate();
     }
 
     private static JLabel createLabelWithMargin(String text) {
@@ -254,7 +258,7 @@ class RoomSearch {
     private static void reserveRoom(String roomNumber, String startDate, String endDate, JPanel roomListPanel, int adultCount, int childCount, String customerName, String customerEmail) {
         Connection connection = DBConnector.getInstance();
 
-        // Query to retrieve hotel_id and room_id based on room_number
+
         String getIdsQuery = "SELECT r.hotel_id, r.id AS room_id, p.board_type_id, p.period_id " +
                 "FROM rooms r " +
                 "JOIN pricelist p ON r.id = p.room_id " +
@@ -271,13 +275,12 @@ class RoomSearch {
                 int boardTypeId = idsResultSet.getInt("board_type_id");
                 int periodId = idsResultSet.getInt("period_id");
 
-                // Insert reservation record
+
                 String reserveQuery = "INSERT INTO reservations (hotel_id, room_id, start_date, end_date, customer_name, customer_email, total_price) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
                 BigDecimal totalPrice = calculateTotalPrice(roomId, boardTypeId, periodId, adultCount, childCount, startDate, endDate);
 
-                // Replace the placeholders below with actual values
                 PreparedStatement reserveStatement = connection.prepareStatement(reserveQuery);
                 reserveStatement.setInt(1, hotelId);
                 reserveStatement.setInt(2, roomId);
@@ -289,12 +292,9 @@ class RoomSearch {
 
                 int rowsAffected = reserveStatement.executeUpdate();
 
-                // TODO: Perform any additional actions or validations based on rowsAffected
-
                 reserveStatement.close();
             } else {
-                // Handle cases where idsResultSet is empty
-                JOptionPane.showMessageDialog(roomListPanel, "Room information not found for room number: " + roomNumber);
+                JOptionPane.showMessageDialog(roomListPanel, "İlgili oda numarası için database de bilgi bulunamadı: " + roomNumber);
             }
 
             getIdsStatement.close();
@@ -344,7 +344,7 @@ class RoomSearch {
 
                 return totalAdultPrice.add(totalChildPrice);
             } else {
-                System.out.println("No price found for the given room, board type, and period.");
+                System.out.println("Fiyat bulunamadı");
             }
         } catch (SQLException e) {
             e.printStackTrace();

@@ -42,8 +42,7 @@ public class LoginGUI extends JFrame {
         setBackground(new Color(0, 0, 0, 180));
         addComponentListener(new ComponentAdapter() {
             @Override
-            public void componentResized(ComponentEvent e) {
-                setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 20, 20));
+            public void componentResized(ComponentEvent e) {setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 20, 20));
             }
         });
         Helper.setLayout();
@@ -79,13 +78,13 @@ public class LoginGUI extends JFrame {
                     String type = rs.getString("type");
                     if (username.equals(uname) && (password.equals(pass))) {
                         if (type.equals("Admin")) {
-                            user.setId(id);
-                            user.setName(name);
-                            user.setUsername(uname);
-                            user.setPassword(pass);
-                            user.setType(type);
+                            operator.setId(id);
+                            operator.setName(name);
+                            operator.setUsername(uname);
+                            operator.setPassword(pass);
+                            operator.setType(type);
                             dispose();
-                            OperatorGUI hm = new OperatorGUI(user);
+                            OperatorGUI hm = new OperatorGUI(operator);
                             hm.setVisible(true);
                             return;
                         } else if (type.equals("User")) {

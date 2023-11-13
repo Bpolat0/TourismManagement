@@ -12,6 +12,9 @@ import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 
 public class OperatorGUI extends JFrame {
@@ -39,20 +42,28 @@ public class OperatorGUI extends JFrame {
     private JButton btn_change_theme;
     private DefaultTableModel mdl_user_list;
     private Object[] row_user_list;
-    private final Operator operator;
 
 
-    public OperatorGUI(User user) {
-        this.operator = (Operator) user;
+    public OperatorGUI(Operator operator) {
+
+        HomePageGUI.FrameDragListener frameDragListener = new HomePageGUI.FrameDragListener(this);
+        this.addMouseListener(frameDragListener);
+        this.addMouseMotionListener(frameDragListener);
+
+        lbl_welcome.setText("Hoşgeldiniz : " + operator.getName());
 
         Helper.setLayout();
+        setUndecorated(true);
+        setBackground(new Color(0, 0, 0, 180));
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 20, 20));
+            }
+        });
         add(wrapper);
         setSize(1000, 500);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle(Config.PROJECT_TITLE);
-        setVisible(true);
-
 
         lbl_welcome.setText("Hoşgeldiniz : " + operator.getName());
 
