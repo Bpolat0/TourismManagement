@@ -20,8 +20,4 @@ public class DBConnector {
         DBConnector db = new DBConnector();
         return db.connectDB();
     }
-
-
-
-
 }

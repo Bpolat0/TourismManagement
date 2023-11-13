@@ -3,22 +3,17 @@ package com.tourismmanagement.View;
 import com.tourismmanagement.Helper.Config;
 import com.tourismmanagement.Helper.DBConnector;
 import com.tourismmanagement.Helper.Helper;
-import com.tourismmanagement.Main;
 import com.tourismmanagement.Model.Operator;
 import com.tourismmanagement.Model.User;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Arrays;
 
 public class LoginGUI extends JFrame {
 
@@ -33,10 +28,11 @@ public class LoginGUI extends JFrame {
     private JPasswordField fld_password;
     private JLabel lbl_pass;
     private User user;
+    private Operator operator;
 
     public LoginGUI() {
         this.user = new User();
-
+        this.operator = new Operator();
 
         HomePageGUI.FrameDragListener frameDragListener = new HomePageGUI.FrameDragListener(this);
         this.addMouseListener(frameDragListener);
@@ -56,7 +52,6 @@ public class LoginGUI extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle(Config.PROJECT_TITLE);
-
 
         btn_login.addActionListener(e -> {
 
@@ -83,14 +78,14 @@ public class LoginGUI extends JFrame {
                     String pass = rs.getString("pass");
                     String type = rs.getString("type");
                     if (username.equals(uname) && (password.equals(pass))) {
-                        if (type.equals("Admin")) { // User nesnesi null değilse devam edin
+                        if (type.equals("Admin")) {
                             user.setId(id);
                             user.setName(name);
                             user.setUsername(uname);
                             user.setPassword(pass);
                             user.setType(type);
                             dispose();
-                            HomePageGUI hm = new HomePageGUI(user);
+                            OperatorGUI hm = new OperatorGUI(user);
                             hm.setVisible(true);
                             return;
                         } else if (type.equals("User")) {
@@ -107,7 +102,7 @@ public class LoginGUI extends JFrame {
                     }
                 }
 
-                Helper.showMsg("Bilgileriniz yanlış !");
+                Helper.showMsg("Bilgilerinizi kontrol ediniz!");
                 fld_password.setText("");
                 fld_user_name.setText("");
 

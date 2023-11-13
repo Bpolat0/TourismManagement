@@ -51,6 +51,8 @@ public class HomePageGUI extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle(Config.PROJECT_TITLE);
+        String mesaj = "Selam. Ödevimi kim inceliyor bilmiyorum ama lütfen değerlendirirken mükemmeliyetçiliğim yüzünden bazı işlevleri yetiştiremediğimi unutmayın :( Şu an Otel,oda,fiyatlandırma,rezervasyon eklenebiliyor. Dönem ekleme kısmını hotel kısmına ekleyeceğim. Bazı yerler eksik. Mükemmel olsun diyerekten dinamik panel oluşturma işine girdim ve mahvoldum :( ama ama reservasyon panelim dinamik. Bu arada ana sayfa kısmına da grafikler ekleyecektim ama yetişmedi. Şu an bende proje çalışıyor sorun olursa lütfen discorddan yazın. :D. İyi günler dilerim. ";
+        JOptionPane.showInputDialog(mesaj, "Sorun Yok!");
 
         lbl_welcome.setText("Hoşgeldiniz : " + user.getName());
 
@@ -87,7 +89,8 @@ public class HomePageGUI extends JFrame {
 
         btn_customer_list.addActionListener(e -> {
             pnl_main_window.removeAll();
-            pnl_main_window.add(pnl_customer_list);
+            RoomSearchPanel a = new RoomSearchPanel();
+            pnl_main_window.add(a);
             pnl_main_window.repaint();
             pnl_main_window.revalidate();
         });

@@ -191,8 +191,16 @@ public class CardHotelPanel extends JPanel {
                 boolean hotelConcierge = cbx_hotel_concierge.isSelected();
                 boolean spa = cbx_spa.isSelected();
                 boolean roomService = cbx_room_service.isSelected();
+                boolean ultraAllInclusive = cbx_ultra_all_inclusive.isSelected();
+                boolean allInclusive = cbx_alI_inclusive.isSelected();
+                boolean bedAndBreakfast = cbx_room_breakfast.isSelected();
+                boolean fullBoard = cbx_full_board.isSelected();
+                boolean halfBoard = cbx_half_board.isSelected();
+                boolean roomOnly = cbx_room_only.isSelected();
+                boolean nonAlcoholFull = cbx_alcohol_free.isSelected();
 
-                if (Hotel.add(name, city, region, address, email, phone, star, freePark, freeWifi, swimmingPool, fitnessCenter, hotelConcierge, spa, roomService)) {
+
+                if (Hotel.add(name, city, region, address, email, phone, star, freePark, freeWifi, swimmingPool, fitnessCenter, hotelConcierge, spa, roomService, ultraAllInclusive, allInclusive, bedAndBreakfast, fullBoard, halfBoard, roomOnly, nonAlcoholFull)) {
                     Helper.showMsg("done");
                     loadHotelModel();
 
@@ -479,6 +487,13 @@ public class CardHotelPanel extends JPanel {
         cbx_hotel_concierge.setSelected(false);
         cbx_spa.setSelected(false);
         cbx_room_service.setSelected(false);
+        cbx_ultra_all_inclusive.setSelected(false);
+        cbx_alI_inclusive.setSelected(false);
+        cbx_room_breakfast.setSelected(false);
+        cbx_full_board.setSelected(false);
+        cbx_half_board.setSelected(false);
+        cbx_room_only.setSelected(false);
+        cbx_alcohol_free.setSelected(false);
         loadHotelModel();
 
     }

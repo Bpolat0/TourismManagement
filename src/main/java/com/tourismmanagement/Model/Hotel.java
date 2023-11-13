@@ -294,8 +294,8 @@ public class Hotel {
     }
 
 
-    public static boolean add(String name, String city, String region, String address, String email, String phone, String star, boolean freePark, boolean freeWifi, boolean swimmingPool, boolean fitnessCenter, boolean hotelConcierge, boolean spa, boolean roomService) {
-        String query = "INSERT INTO hotel (name, city, region, address, email, phone, star,freePark, freeWifi, swimmingPool, fitnessCenter, hotelConcierge, spa, roomService ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    public static boolean add(String name, String city, String region, String address, String email, String phone, String star, boolean freePark, boolean freeWifi, boolean swimmingPool, boolean fitnessCenter, boolean hotelConcierge, boolean spa, boolean roomService, boolean ultraAllInclusive, boolean allInclusive, boolean bedAndBreakfast, boolean fullBoard, boolean halfBoard, boolean roomOnly, boolean nonAlcoholFull) {
+        String query = "INSERT INTO hotels (name, city, region, address, email, phone, star,freePark, freeWifi, swimmingPool, fitnessCenter, hotelConcierge, spa, roomService, ultraAllInclusive, allInclusive, bedAndBreakfast, fullBoard, halfBoard,roomOnly, nonAlcoholFull ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         Hotel findHotel = Hotel.getFetch(name, email, phone);
         //, boolean ultraAllInclusive, boolean allInclusive, boolean bedAndBreakfast, boolean fullBoard, boolean halfBoard, boolean roomOnly, boolean nonAlcoholFull
         if (findHotel != null) {
@@ -318,7 +318,13 @@ public class Hotel {
             pr.setBoolean(12, hotelConcierge);
             pr.setBoolean(13, spa);
             pr.setBoolean(14, roomService);
-
+            pr.setBoolean(15, ultraAllInclusive);
+            pr.setBoolean(16, allInclusive);
+            pr.setBoolean(17, bedAndBreakfast);
+            pr.setBoolean(18, fullBoard);
+            pr.setBoolean(19, halfBoard);
+            pr.setBoolean(20, roomOnly);
+            pr.setBoolean(21, nonAlcoholFull);
             int response = pr.executeUpdate();
 
             if (response == -1) {
@@ -332,7 +338,7 @@ public class Hotel {
 
     private static Hotel getFetch(String name, String email, String phone) {
         Hotel obj = null;
-        String query = "SELECT * FROM hotel WHERE name = ? AND email = ? AND phone = ?";
+        String query = "SELECT * FROM hotels WHERE name = ? AND email = ? AND phone = ?";
 
         try {
             PreparedStatement pr = DBConnector.getInstance().prepareStatement(query);
