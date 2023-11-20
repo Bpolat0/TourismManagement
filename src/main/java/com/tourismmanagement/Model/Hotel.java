@@ -373,7 +373,7 @@ public class Hotel {
     }
 
     public static boolean update(int id, String name, String city, String region, String address, String email, String phone, String star, boolean freePark, boolean freeWifi, boolean swimmingPool, boolean fitnessCenter, boolean hotelConcierge, boolean spa, boolean roomService) {
-        String query = "UPDATE hotel SET name = ?, city = ?, region = ?, address = ?, email = ?, phone = ?, star = ?, freePark = ?, freeWifi = ?, swimmingPool = ?, fitnessCenter = ?, hotelConcierge = ?, spa = ?, roomService = ? WHERE id = ?";
+        String query = "UPDATE hotels SET name = ?, city = ?, region = ?, address = ?, email = ?, phone = ?, star = ?, freePark = ?, freeWifi = ?, swimmingPool = ?, fitnessCenter = ?, hotelConcierge = ?, spa = ?, roomService = ? WHERE id = ?";
         try {
             PreparedStatement pr = DBConnector.getInstance().prepareStatement(query);
             pr.setString(1, name);
@@ -406,7 +406,7 @@ public class Hotel {
     }
 
     public static boolean delete(int id) {
-        String query = "DELETE FROM hotel WHERE id = ?";
+        String query = "DELETE FROM hotels WHERE id = ?";
         PreparedStatement pr = null;
         try {
             pr = DBConnector.getInstance().prepareStatement(query);

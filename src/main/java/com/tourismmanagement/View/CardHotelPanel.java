@@ -1,10 +1,12 @@
 package com.tourismmanagement.View;
 
+import com.toedter.calendar.JDateChooser;
 import com.tourismmanagement.Helper.Helper;
+import com.tourismmanagement.Helper.Item;
 import com.tourismmanagement.Model.BoardType;
 import com.tourismmanagement.Model.Hotel;
 import com.tourismmanagement.Model.Period;
-
+import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -63,6 +65,19 @@ public class CardHotelPanel extends JPanel {
     private JTable tbl_period;
     private JScrollPane scrl_board_types;
     private JScrollPane scrl_seasons;
+    private JPanel pnl_add_period;
+    private JTextField fld_period_name;
+    private JPanel pnl_date_start;
+    private JPanel pnl_date_end;
+    private JComboBox chbx_hotel_list;
+    private JPanel pnl_period_control;
+    private JButton btn_period_delete_with_combobox;
+    private JButton btn_period_add;
+    private JTextField fld_hotel_period;
+    private JPanel pnl_boardAndPeriod_control;
+    private JComboBox chbx_period_list;
+    private JDateChooser JDateChooser1;
+    private JDateChooser JDateChooser2;
 
     public CardHotelPanel() {
         setLayout(new BorderLayout());
@@ -77,9 +92,14 @@ public class CardHotelPanel extends JPanel {
         add(pnl_add_hotel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
 
-        Helper.setLayout();
         add(wrapper);
         setSize(600, 400);
+        pnl_date_start.setLayout(new MigLayout());
+        pnl_date_end.setLayout(new MigLayout());
+        JDateChooser1 = new JDateChooser();
+        JDateChooser2 = new JDateChooser();
+        pnl_date_start.add(JDateChooser1);
+        pnl_date_end.add(JDateChooser2);
         pnl_add_hotel.setVisible(true);
 
 
@@ -87,10 +107,7 @@ public class CardHotelPanel extends JPanel {
         mdl_hotel_list = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
-                if (column == 0) {
-                    return false;
-                }
-                return super.isCellEditable(row, column);
+                return false; // Tüm hücrelerin düzenlenmesini engeller
             }
         };
         Object[] col_hotel_list = {"ID", "Hotel Adı", "Şehir", "Bölge", "Adres", "E-mail", "Telefon", "Yıldız", "Otopark Durumu", "Wifi Hizmeti", "Yüzme Havuzu", "Fitness Center", "Hotel Concierge", "SPA", "Oda Servisi", "Ultra Herşey Dahil", "Herşey Dahil", "Oda Kahvaltı", "Tam Pansiyon", "Yarım Pansiyon", "Sadece Yatak", "Alkol Hariç Full credit"};
@@ -100,6 +117,7 @@ public class CardHotelPanel extends JPanel {
         loadHotelModel();
         tbl_hotel_list.setModel(mdl_hotel_list);
         tbl_hotel_list.getTableHeader().setReorderingAllowed(false);
+        tbl_hotel_list.getTableHeader().setResizingAllowed(false);
 
         //#ModelHotelList
 
@@ -107,10 +125,7 @@ public class CardHotelPanel extends JPanel {
         mdl_board_list = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
-                if (column == 0) {
-                    return false;
-                }
-                return super.isCellEditable(row, column);
+                return false; // Tüm hücrelerin düzenlenmesini engeller
             }
         };
         Object[] col_board_list = {"Pansiyon Tipi"};
@@ -124,13 +139,10 @@ public class CardHotelPanel extends JPanel {
         mdl_period_list = new DefaultTableModel(){
             @Override
             public boolean isCellEditable(int row, int column) {
-                if (column == 0){
-                    return false;
-                }
-                return super.isCellEditable(row, column);
+                return false; // Tüm hücrelerin düzenlenmesini engeller
             }
         };
-        Object[] col_period_list = {"Sezon", "Sezon Başlangıç", "Sezon Bitiş"};
+        Object[] col_period_list = {"Sezon", "Sezon İsmi", "Sezon Başlangıç", "Sezon Bitiş"};
         mdl_period_list.setColumnIdentifiers(col_period_list);
         row_period_list = new Object[col_period_list.length];
         tbl_period.setModel(mdl_period_list);
@@ -153,22 +165,11 @@ public class CardHotelPanel extends JPanel {
                 int selectedRow = tbl_hotel_list.getSelectedRow();
                 int id = (int) tbl_hotel_list.getValueAt(selectedRow, 0);
                 String.valueOf(id);
+                setFld_hotel_period(String.valueOf(id));
                 // loadBoardModel() metodunu id parametresi ile çağırın
                 loadBoardModel(String.valueOf(id));
-            }
-        });
-
-        ListSelectionModel selectionModel0 = tbl_period.getSelectionModel();
-        selectionModel.addListSelectionListener(e -> {
-            setTbl_hotel_list();
-            if (!e.getValueIsAdjusting()) {
-                // Seçilen otelin id'sini alın
-                int selectedRow = tbl_hotel_list.getSelectedRow();
-                int id = (int) tbl_hotel_list.getValueAt(selectedRow, 0);
-                String.valueOf(id);
-                // loadBoardModel() metodunu id parametresi ile çağırın
                 loadPeriodModel(String.valueOf(id));
-                loadPeriodModel(String.valueOf(id));
+                loadPeriodComboBox(id);
             }
         });
 
@@ -202,12 +203,13 @@ public class CardHotelPanel extends JPanel {
 
                 if (Hotel.add(name, city, region, address, email, phone, star, freePark, freeWifi, swimmingPool, fitnessCenter, hotelConcierge, spa, roomService, ultraAllInclusive, allInclusive, bedAndBreakfast, fullBoard, halfBoard, roomOnly, nonAlcoholFull)) {
                     Helper.showMsg("done");
+                    clearHotelAddPanel();
                     loadHotelModel();
 
-                    clearHotelAddPanel();
                 } else {
                     Helper.showMsg("error");
                 }
+
             }
         });
 
@@ -233,8 +235,6 @@ public class CardHotelPanel extends JPanel {
 
                 if (Hotel.update(id, name, city, region, address, email, phone, star, freePark, freeWifi, swimmingPool, fitnessCenter, hotelConcierge, spa, roomService)) {
                     Helper.showMsg("done");
-                    loadHotelModel();
-
                     clearHotelAddPanel();
                 } else {
                     Helper.showMsg("error");
@@ -265,6 +265,42 @@ public class CardHotelPanel extends JPanel {
         btn_hotel_panel_clear.addActionListener(e -> {
             clearHotelAddPanel();
         });
+
+        btn_period_add.addActionListener(e -> {
+            if (Helper.isFieldEmpty(fld_period_name) || Helper.isFieldEmpty(fld_hotel_period) || JDateChooser1.getDate() == null || JDateChooser2.getDate() == null) {
+                Helper.showMsg("fill");
+
+            } else {
+                String periodName = fld_period_name.getText();
+                String hotelId = fld_hotel_period.getText();
+                java.sql.Date startDate = new java.sql.Date(JDateChooser1.getDate().getTime());
+                java.sql.Date endDate = new java.sql.Date(JDateChooser2.getDate().getTime());
+                if (Period.addPeriodsForHotel(Integer.parseInt(hotelId), startDate, endDate, periodName)) {
+                    Helper.showMsg("done");
+                    loadPeriodModel(fld_hotel_period.getText());
+                    loadPeriodComboBox(Integer.parseInt(hotelId));
+                } else {
+                    Helper.showMsg("Bu dönem bilgileri sistemde kayıtlıdır!");
+
+                }
+            }
+        });
+        btn_period_delete_with_combobox.addActionListener(e -> {
+            if (chbx_period_list.getSelectedIndex() != -1) {
+                if (Helper.confirm("sure")) {
+                    int id = ((Item) chbx_period_list.getSelectedItem()).getKey();
+                    if (Period.delete(id)) {
+                        Helper.showMsg("done");
+                        loadPeriodModel(fld_hotel_period.getText());
+                        loadPeriodComboBox(Integer.parseInt(fld_hotel_period.getText()));
+                    } else {
+                        Helper.showMsg("error");
+                    }
+                }
+            } else {
+                Helper.showMsg("Lütfen silmek istediğiniz dönemi seçiniz!");
+            }
+        });
     }
 
     private void loadPeriodModel(String id) {
@@ -273,17 +309,16 @@ public class CardHotelPanel extends JPanel {
 
         for (Period obj : Period.getPeriodsForHotel(id)) {
             row_period_list[0] = obj.getPeriodId();
-            row_period_list[1] = obj.getStartDate();
-            row_period_list[2] = obj.getEndDate();
+            row_period_list[1] = obj.getPeriodName();
+            row_period_list[2] = obj.getStartDate();
+            row_period_list[3] = obj.getEndDate();
             mdl_period_list.addRow(row_period_list);
         }
     }
 
     public void loadHotelModel() {
-
         DefaultTableModel clearModel = (DefaultTableModel) tbl_hotel_list.getModel();
         clearModel.setRowCount(0);
-
         for (Hotel obj : Hotel.getList()) {
             int i = 0;
             row_hotel_list[i++] = obj.getId();
@@ -494,8 +529,22 @@ public class CardHotelPanel extends JPanel {
         cbx_half_board.setSelected(false);
         cbx_room_only.setSelected(false);
         cbx_alcohol_free.setSelected(false);
-        loadHotelModel();
+    }
 
+    public void setFld_hotel_period(String fld_hotel_period) {
+        this.fld_hotel_period.setText(fld_hotel_period);
+    }
+
+    public void loadPeriodComboBox(int id){
+        chbx_period_list.removeAllItems();
+        for (Period obj : Period.getPeriodsForHotel(String.valueOf(id))) {
+            chbx_period_list.addItem(new Item(obj.getPeriodId(), obj.getPeriodName()));
+        }
+    }
+
+    public void revalidateAll() {
+        revalidate();
+        repaint();
     }
 
 }

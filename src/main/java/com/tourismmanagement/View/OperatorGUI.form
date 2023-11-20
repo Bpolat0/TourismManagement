@@ -112,8 +112,8 @@
                     </constraints>
                     <properties>
                       <model>
-                        <item value="admin"/>
-                        <item value="user"/>
+                        <item value="Admin"/>
+                        <item value="User"/>
                       </model>
                     </properties>
                   </component>

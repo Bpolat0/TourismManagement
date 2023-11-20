@@ -16,7 +16,7 @@ public class RoomPrice {
     private double adult_price;
     private double child_price;
     private String hotel_name;
-    private int room_number;
+    private String room_type;
     private String board_type_name;
     private String season;
 
@@ -24,9 +24,9 @@ public class RoomPrice {
     public RoomPrice() {
     }
 
-    public RoomPrice(String hotel_name, int room_number, String board_type_name, String season, double adult_price, double child_price) {
+    public RoomPrice(String hotel_name, String room_type, String board_type_name, String season, double adult_price, double child_price) {
         this.hotel_name = hotel_name;
-        this.room_number = room_number;
+        this.room_type = room_type;
         this.board_type_name = board_type_name;
         this.season = season;
         this.adult_price = adult_price;
@@ -98,12 +98,12 @@ public class RoomPrice {
         this.hotel_name = hotel_name;
     }
 
-    public int getRoom_number() {
-        return room_number;
+    public String getRoom_type() {
+        return room_type;
     }
 
-    public void setRoom_number(int room_number) {
-        this.room_number = room_number;
+    public void setRoom_type(String room_type) {
+        this.room_type = room_type;
     }
 
     public String getBoard_type_name() {
@@ -122,8 +122,8 @@ public class RoomPrice {
         this.season = season;
     }
 
-    public static boolean add(int id, int room_id, int board_type_id, int period_id, double adult_price, double child_price) {
-        String query = "INSERT INTO pricelist (room_id, board_type_id, period_id, adult_price, child_price) VALUES (?, ?, ?, ?, ?)";
+    public static boolean add(int room_id, int period_id, int board_type_id, double adult_price, double child_price) {
+        String query = "INSERT INTO room_prices (room_id, period_id, board_types_id, adult_price, child_price) VALUES (?, ?, ?, ?, ?)";
         boolean findRoomPrice = RoomPrice.getFetch(room_id, period_id, board_type_id);
         if (findRoomPrice) {
             Helper.showMsg("Bu oda için fiyat ayarlanmıştır!");
@@ -132,15 +132,15 @@ public class RoomPrice {
         try {
             PreparedStatement pr = DBConnector.getInstance().prepareStatement(query);
             pr.setInt(1, room_id);
-            pr.setInt(2, board_type_id);
-            pr.setInt(3, period_id);
+            pr.setInt(2, period_id);
+            pr.setInt(3, board_type_id);
             pr.setDouble(4, adult_price);
             pr.setDouble(5, child_price);
             int response = pr.executeUpdate();
 
             if (response == -1) {
                 Helper.showMsg("error");
-            }else {
+            } else {
                 Helper.showMsg("done");
             }
             return response != -1;
@@ -150,7 +150,7 @@ public class RoomPrice {
     }
 
     private static boolean getFetch(int roomId, int periodId, int boardTypeId) {
-        String query = "SELECT COUNT(*) FROM pricelist WHERE room_id = ? AND period_id = ? AND board_type_id = ?";
+        String query = "SELECT COUNT(*) FROM room_prices WHERE room_id = ? AND period_id = ? AND board_types_id = ?";
 
         try (PreparedStatement pst = DBConnector.getInstance().prepareStatement(query)) {
             pst.setInt(1, roomId);
@@ -172,7 +172,7 @@ public class RoomPrice {
 
     public static ArrayList<RoomPrice> getList() {
         ArrayList<RoomPrice> roomPriceList = new ArrayList<>();
-        String query = "SELECT * FROM pricelist";
+        String query = "SELECT * FROM room_prices";
         RoomPrice roomPrice;
         try {
             PreparedStatement pr = DBConnector.getInstance().prepareStatement(query);
@@ -196,15 +196,14 @@ public class RoomPrice {
 
     public static ArrayList<RoomPrice> getSpecialList() {
         ArrayList<RoomPrice> roomPriceList = new ArrayList<>();
-        String query = "SELECT h.name AS hotel_name, r.room_number, bt.board_type_name, " +
-                "CONCAT(p.start_date, ' - ', p.end_date) AS season, " +
-                "pl.adult_price, pl.child_price " +
-                "FROM hotels h " +
-                "JOIN rooms r ON h.id = r.hotel_id " +
-                "JOIN pricelist pl ON r.id = pl.room_id " +
-                "JOIN hotel_boardtypes hb ON r.hotel_id = hb.hotel_id AND pl.board_type_id = hb.board_type_id " +
-                "JOIN board_types bt ON hb.board_type_id = bt.id " +
-                "JOIN periods p ON pl.period_id = p.period_id";
+        String query = "SELECT h.name AS 'Otel Adı', r.room_type AS 'Oda Tipi', bt.board_type_name AS 'Pansiyon Tipi', p.period_name AS 'Sezon', rp.adult_price AS 'Yetişkin Fiyatı', rp.child_price AS 'Çocuk Fiyatı' " +
+                "FROM room_prices rp " +
+                "JOIN rooms r ON rp.room_id = r.id " +
+                "JOIN hotels h ON r.hotel_id = h.id " +
+                "JOIN periods p ON rp.period_id = p.period_id " +
+                "JOIN board_types bt ON rp.board_types_id = bt.id";
+
+
         RoomPrice roomPrice;
         try {
             PreparedStatement pr = DBConnector.getInstance().prepareStatement(query);
@@ -212,12 +211,12 @@ public class RoomPrice {
 
             while (rs.next()) {
                 roomPrice = new RoomPrice();
-                roomPrice.setHotel_name(rs.getString("hotel_name"));
-                roomPrice.setRoom_number(rs.getInt("room_number"));
-                roomPrice.setBoard_type_name(rs.getString("board_type_name"));
-                roomPrice.setSeason(rs.getString("season"));
-                roomPrice.setAdult_price(rs.getDouble("adult_price"));
-                roomPrice.setChild_price(rs.getDouble("child_price"));
+                roomPrice.setHotel_name(rs.getString("Otel Adı"));
+                roomPrice.setRoom_type(rs.getString("Oda Tipi"));
+                roomPrice.setBoard_type_name(rs.getString("Pansiyon Tipi"));
+                roomPrice.setSeason(rs.getString("Sezon"));
+                roomPrice.setAdult_price(rs.getDouble("Yetişkin Fiyatı"));
+                roomPrice.setChild_price(rs.getDouble("Çocuk Fiyatı"));
                 roomPriceList.add(roomPrice);
             }
         } catch (SQLException e) {
@@ -225,6 +224,8 @@ public class RoomPrice {
         }
         return roomPriceList;
     }
+
+
 
 
 }

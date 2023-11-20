@@ -19,6 +19,9 @@ public class Item {
         this.roomNumber = roomNumber;
     }
 
+    public Item(int id) {
+    }
+
     public int getKey() {
         return key;
     }
@@ -37,5 +40,9 @@ public class Item {
 
     public String toString() {
         return this.value;
+    }
+
+    public String RoomCombo() {
+        return key + " " + value;
     }
 }

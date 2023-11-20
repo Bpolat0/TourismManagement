@@ -5,6 +5,7 @@ import com.formdev.flatlaf.extras.FlatAnimatedLafChange;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.tourismmanagement.Helper.Config;
 import com.tourismmanagement.Helper.Helper;
+import com.tourismmanagement.Helper.JGraph;
 import com.tourismmanagement.Model.User;
 import javax.swing.*;
 import java.awt.*;
@@ -51,14 +52,22 @@ public class HomePageGUI extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle(Config.PROJECT_TITLE);
-        String mesaj = "Selam. Ödevimi kim inceliyor bilmiyorum ama lütfen değerlendirirken mükemmeliyetçiliğim yüzünden bazı işlevleri yetiştiremediğimi unutmayın :( Şu an Otel,oda,fiyatlandırma,rezervasyon eklenebiliyor. Dönem ekleme kısmını hotel kısmına ekleyeceğim. Bazı yerler eksik. Mükemmel olsun diyerekten dinamik panel oluşturma işine girdim ve mahvoldum :( ama ama reservasyon panelim dinamik. Bu arada ana sayfa kısmına da grafikler ekleyecektim ama yetişmedi. Şu an bende proje çalışıyor sorun olursa lütfen discorddan yazın. :D. İyi günler dilerim. ";
-        JOptionPane.showInputDialog(mesaj, "Sorun Yok!");
+
+        pnl_main_window.removeAll();
+        CardHomePanel aa = new CardHomePanel();
+        pnl_main_window.add(aa);
+        pnl_main_window.repaint();
+        pnl_main_window.revalidate();
+
+
+
 
         lbl_welcome.setText("Hoşgeldiniz : " + user.getName());
 
         btn_home_page.addActionListener(e -> {
             pnl_main_window.removeAll();
-            pnl_main_window.add(pnl_home_page);
+            CardHomePanel a = new CardHomePanel();
+            pnl_main_window.add(a);
             pnl_main_window.repaint();
             pnl_main_window.revalidate();
         });
@@ -89,7 +98,7 @@ public class HomePageGUI extends JFrame {
 
         btn_customer_list.addActionListener(e -> {
             pnl_main_window.removeAll();
-            RoomSearchPanel a = new RoomSearchPanel();
+            CardReservation a = new CardReservation();
             pnl_main_window.add(a);
             pnl_main_window.repaint();
             pnl_main_window.revalidate();
@@ -103,11 +112,14 @@ public class HomePageGUI extends JFrame {
 
         btn_change_theme.addActionListener(e -> {
             if (!FlatLaf.isLafDark()) {
-                EventQueue.invokeLater(() -> {
+                EventQueue.invokeLater(() ->
+                {
                     FlatAnimatedLafChange.showSnapshot();
                     FlatDarkLaf.setup();
                     FlatDarkLaf.updateUI();
                     FlatAnimatedLafChange.hideSnapshotWithAnimation();
+                    pnl_main_window.repaint();
+                    pnl_main_window.revalidate();
                 });
             } else {
                 EventQueue.invokeLater(() -> {
@@ -115,6 +127,8 @@ public class HomePageGUI extends JFrame {
                     FlatMacLightLaf.setup();
                     FlatDarkLaf.updateUI();
                     FlatAnimatedLafChange.hideSnapshotWithAnimation();
+                    pnl_main_window.repaint();
+                    pnl_main_window.revalidate();
                 });
             }
         });

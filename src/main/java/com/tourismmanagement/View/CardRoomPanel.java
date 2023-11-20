@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static com.tourismmanagement.Model.Room.addRoom;
+
 public class CardRoomPanel extends JPanel {
     private JPanel wrapper;
     private JPanel pnl_room;
@@ -41,7 +43,7 @@ public class CardRoomPanel extends JPanel {
 
     public CardRoomPanel() {
         setLayout(new BorderLayout());
-        Helper.setLayout();
+
         add(wrapper);
         setSize(600, 400);
 
@@ -51,24 +53,23 @@ public class CardRoomPanel extends JPanel {
         mdl_room_list = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
-                if (column == 0) {
-                    return false;
-                }
-                return super.isCellEditable(row, column);
+                return false; // Tüm hücrelerin düzenlenmesini engeller
             }
         };
-        Object[] col_room_list = {"İD", "Oda Sayısı", "Oda Tipi", "Stok Sayısı", "Yatak Sayısı", "Metre Kare", "Televizyon", "Minibar", "Oyun Konsolu", "Kasa", "Projeksiyon"};
+        Object[] col_room_list = {"İD", "Oda Tipi", "Stok Sayısı", "Yatak Sayısı", "Metre Kare", "Televizyon", "Minibar", "Oyun Konsolu", "Kasa", "Projeksiyon"};
         mdl_room_list.setColumnIdentifiers(col_room_list);
 
         row_room_list = new Object[col_room_list.length];
         loadRoomModel();
         tbl_room_list.setModel(mdl_room_list);
         tbl_room_list.getTableHeader().setReorderingAllowed(false);
+        tbl_room_list.getTableHeader().setResizingAllowed(false);
+
+        //#ModelRoomList
 
 
         btn_rooml_add.addActionListener(e -> {
             int hotel_id = ((Item) chbx_hotel_list.getSelectedItem()).getKey();
-            String room_number = fld_room_number.getText();
             String room_type = fld_room_type.getText();
             String stock_quantity = fld_room_stock.getText();
             String bed_quantity = fld_room_bed.getText();
@@ -79,13 +80,16 @@ public class CardRoomPanel extends JPanel {
             boolean safe = cbx_safe.isSelected();
             boolean projection = cbx_projection.isSelected();
 
-            if (Helper.isFieldEmpty(fld_room_number) || Helper.isFieldEmpty(fld_room_stock) || Helper.isFieldEmpty(fld_room_bed) || Helper.isFieldEmpty(fld_room_msq)) {
+            if (Helper.isFieldEmpty(fld_room_type) || Helper.isFieldEmpty(fld_room_stock) || Helper.isFieldEmpty(fld_room_bed) || Helper.isFieldEmpty(fld_room_msq)) {
                 Helper.showMsg("fill");
             } else {
-                addRoom(hotel_id, Integer.parseInt(room_number), room_type, Integer.parseInt(stock_quantity), Integer.parseInt(bed_quantity), Integer.parseInt(meter_square), television, minibar, game_console, safe, projection);
-                loadRoomModel();
-                clearForm();
-                Helper.showMsg("done");
+                if (addRoom(hotel_id, room_type, Integer.parseInt(stock_quantity), Integer.parseInt(bed_quantity), Integer.parseInt(meter_square), television, minibar, game_console, safe, projection)) {
+                    loadRoomModel();
+                    clearForm();
+                    Helper.showMsg("done");
+                }else {
+                    Helper.showMsg("error");
+                }
             }
 
         });
@@ -108,7 +112,7 @@ public class CardRoomPanel extends JPanel {
             cbx_safe.setSelected(false);
             cbx_projection.setSelected(false);
             for (Room obj : Room.getRoomList()) {
-                if (obj.getId() == id){
+                if (obj.getId() == id) {
                     obj.setId(id);
                     boolean a = obj.isTelevision();
                     boolean b = obj.isMinibar();
@@ -122,14 +126,12 @@ public class CardRoomPanel extends JPanel {
                     cbx_projection.setSelected(e);
                 }
             }
-            int room_number = (int) tbl_room_list.getValueAt(selectedRow, 1);
-            String room_type = (String) tbl_room_list.getValueAt(selectedRow, 2);
-            int stock_quantity = (int) tbl_room_list.getValueAt(selectedRow, 3);
-            int bed_quantity = (int) tbl_room_list.getValueAt(selectedRow, 4);
-            int meter_square = (int) tbl_room_list.getValueAt(selectedRow, 5);
+            String room_type = (String) tbl_room_list.getValueAt(selectedRow, 1);
+            int stock_quantity = (int) tbl_room_list.getValueAt(selectedRow, 2);
+            int bed_quantity = (int) tbl_room_list.getValueAt(selectedRow, 3);
+            int meter_square = (int) tbl_room_list.getValueAt(selectedRow, 4);
             loadRoomHotelCombo(hotel_id);
             chbx_hotel_list.addItem(new Item(hotel_id, loadRoomHotelCombo(hotel_id)));
-            fld_room_number.setText(String.valueOf(room_number));
             fld_room_type.setText(room_type);
             fld_room_stock.setText(String.valueOf(stock_quantity));
             fld_room_bed.setText(String.valueOf(bed_quantity));
@@ -139,26 +141,6 @@ public class CardRoomPanel extends JPanel {
     }
 
 
-    public static void addRoom(int hotel_id, int room_number, String room_type, int stock_quantity, int bed_quantity, int meter_square, boolean television, boolean minibar, boolean game_console, boolean safe, boolean projection) {
-        String query = "INSERT INTO rooms (hotel_id, room_number, room_type, stock_quantity, bed_quantity, meter_square, television, minibar, game_console, safe, projection) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try {
-            PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
-            pst.setInt(1, hotel_id);
-            pst.setInt(2, room_number);
-            pst.setString(3, room_type);
-            pst.setInt(4, stock_quantity);
-            pst.setInt(5, bed_quantity);
-            pst.setInt(6, meter_square);
-            pst.setBoolean(7, television);
-            pst.setBoolean(8, minibar);
-            pst.setBoolean(9, game_console);
-            pst.setBoolean(10, safe);
-            pst.setBoolean(11, projection);
-            pst.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     private void loadRoomModel() {
         DefaultTableModel clearModel = (DefaultTableModel) tbl_room_list.getModel();
@@ -167,7 +149,6 @@ public class CardRoomPanel extends JPanel {
         for (Room obj : Room.getRoomList()) {
             int i = 0;
             row_room_list[i++] = obj.getId();
-            row_room_list[i++] = obj.getRoom_number();
             row_room_list[i++] = obj.getRoom_type();
             row_room_list[i++] = obj.getStock_quantity();
             row_room_list[i++] = obj.getBed_quantity();
@@ -209,7 +190,6 @@ public class CardRoomPanel extends JPanel {
     }
 
     public void clearForm() {
-        fld_room_number.setText("");
         fld_room_type.setText("");
         fld_room_stock.setText("");
         fld_room_bed.setText("");

@@ -1,6 +1,5 @@
 package com.tourismmanagement.Model;
 
-import com.kitfox.svg.A;
 import com.tourismmanagement.Helper.DBConnector;
 import com.tourismmanagement.Helper.Helper;
 
@@ -13,6 +12,7 @@ import java.util.*;
 public class Room {
     private int id;
     private int hotel_id;
+    private String hotel_name;
     private int room_number;
     private String room_type;
     private int stock_quantity;
@@ -37,6 +37,17 @@ public class Room {
         this.game_console = game_console;
         this.safe = safe;
         this.projection = projection;
+    }
+
+    public Room() {
+    }
+
+    public String getHotel_name() {
+        return hotel_name;
+    }
+
+    public void setHotel_name(String hotel_name) {
+        this.hotel_name = hotel_name;
     }
 
     public int getId() {
@@ -135,9 +146,6 @@ public class Room {
         this.projection = projection;
     }
 
-    public Room() {
-    }
-
     public static int getRoomIdByNumber(int i) {
         int room_id = 0;
         String query = "SELECT id FROM rooms WHERE room_number = ?";
@@ -155,6 +163,7 @@ public class Room {
         }
         return room_id;
     }
+
     public static ArrayList<Room> getRoomList() {
         ArrayList<Room> roomList = new ArrayList<>();
         String query = "SELECT * FROM rooms";
@@ -166,7 +175,6 @@ public class Room {
                 obj = new Room();
                 obj.setId(rs.getInt("id"));
                 obj.setHotel_id(rs.getInt("hotel_id"));
-                obj.setRoom_number(rs.getInt("room_number"));
                 obj.setRoom_type(rs.getString("room_type"));
                 obj.setStock_quantity(rs.getInt("stock_quantity"));
                 obj.setBed_quantity(rs.getInt("bed_quantity"));
@@ -188,25 +196,146 @@ public class Room {
         return roomList;
     }
 
-    public static void addRoom(int hotel_id, int room_number, String room_type, int stock_quantity, int bed_quantity, int meter_square, boolean television, boolean minibar, boolean game_console, boolean safe, boolean projection) {
-        String query = "INSERT INTO rooms (hotel_id, room_number, room_type, stock_quantity, bed_quantity, meter_square, television, minibar, game_console, safe, projection) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static ArrayList<Room> getSpecialRoomList(){
+        ArrayList<Room> roomList = new ArrayList<>();
+        String query = "SELECT h.name AS 'Otel İsmi', r.room_type AS 'Oda Tipi', r.bed_quantity AS 'Yatak Sayısı', r.meter_square AS 'Metre Kare', " +
+                "r.television AS 'Televizyon', r.minibar AS 'Minibar', r.game_console AS 'Oyun Konsolu', r.safe AS 'Kasa', r.projection AS 'Projeksiyon' " +
+                "FROM rooms r " +
+                "JOIN hotels h ON r.hotel_id = h.id";
+        Room obj;
+        try {
+            Statement st = DBConnector.getInstance().createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()) {
+                obj = new Room();
+                obj.setHotel_name(rs.getString("Otel İsmi"));
+                obj.setRoom_type(rs.getString("Oda Tipi"));
+                obj.setBed_quantity(rs.getInt("Yatak Sayısı"));
+                obj.setMeter_square(rs.getInt("Metre Kare"));
+                obj.setTelevision(rs.getBoolean("Televizyon"));
+                obj.setMinibar(rs.getBoolean("Minibar"));
+                obj.setGame_console(rs.getBoolean("Oyun Konsolu"));
+                obj.setSafe(rs.getBoolean("Kasa"));
+                obj.setProjection(rs.getBoolean("Projeksiyon"));
+                roomList.add(obj);
+            }
+            rs.close();
+            st.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return roomList;
+    }
+
+    public static ArrayList<Room> roomSearchList(String city, Date startDate, Date endDate) {
+        ArrayList<Room> roomList = new ArrayList<>();
+        String query = "SELECT h.name AS 'Otel İsmi', r.room_type AS 'Oda Tipi', r.bed_quantity AS 'Yatak Sayısı', r.meter_square AS 'Metre Kare', " +
+                "r.television AS 'Televizyon', r.minibar AS 'Minibar', r.game_console AS 'Oyun Konsolu', r.safe AS 'Kasa', r.projection AS 'Projeksiyon' " +
+                "FROM rooms r " +
+                "JOIN hotels h ON r.hotel_id = h.id " +
+                "JOIN periods p ON p.hotel_id = h.id " +
+                "WHERE h.city = ? " +
+                "AND p.start_date <= ? " +
+                "AND p.end_date >= ? " +
+                "AND r.stock_quantity > 0";
+
+        try {
+            PreparedStatement pr = DBConnector.getInstance().prepareStatement(query);
+            pr.setString(1, city);
+            pr.setDate(2, new java.sql.Date(startDate.getTime()));
+            pr.setDate(3, new java.sql.Date(endDate.getTime()));
+
+            ResultSet rs = pr.executeQuery();
+            while (rs.next()) {
+                Room room = new Room();
+                room.setHotel_name(rs.getString("Otel İsmi"));
+                room.setRoom_type(rs.getString("Oda Tipi"));
+                room.setBed_quantity(rs.getInt("Yatak Sayısı"));
+                room.setMeter_square(rs.getInt("Metre Kare"));
+                room.setTelevision(rs.getBoolean("Televizyon"));
+                room.setMinibar(rs.getBoolean("Minibar"));
+                room.setGame_console(rs.getBoolean("Oyun Konsolu"));
+                room.setSafe(rs.getBoolean("Kasa"));
+                room.setProjection(rs.getBoolean("Projeksiyon"));
+                roomList.add(room);
+            }
+            rs.close();
+            pr.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return roomList;
+    }
+
+    public static boolean addRoom(int hotel_id, String room_type, int stock_quantity, int bed_quantity, int meter_square, boolean television, boolean minibar, boolean game_console, boolean safe, boolean projection) {
+        String query = "INSERT INTO rooms (hotel_id, room_type, stock_quantity, bed_quantity, meter_square, television, minibar, game_console, safe, projection) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        if (stock_quantity == 0) {
+            Helper.showMsg("Stok sayısı 0 olamaz!");
+            return false;
+        } else if (bed_quantity == 0) {
+            Helper.showMsg("Yatak sayısı 0 olamaz!");
+            return false;
+        } else if (meter_square == 0) {
+            Helper.showMsg("Metre kare 0 olamaz!");
+            return false;
+        } else if (room_type.equals("")) {
+            Helper.showMsg("Oda tipi boş bırakılamaz!");
+            return false;
+        } else if (hotel_id == 0) {
+            Helper.showMsg("Otel seçimi yapılmadı!");
+            return false;
+        } else if (stock_quantity < 0) {
+            Helper.showMsg("Stok sayısı negatif olamaz!");
+            return false;
+        } else if (bed_quantity < 0) {
+            Helper.showMsg("Yatak sayısı negatif olamaz!");
+            return false;
+        } else if (meter_square < 0) {
+            Helper.showMsg("Metre kare negatif olamaz!");
+            return false;
+        }
+        //aynı oda tipi aynı otelde olamaz
+        if (roomTypeExist(hotel_id, room_type)) {
+            Helper.showMsg("Bu oda tipi zaten mevcut!");
+            return false;
+        }
         try {
             PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
             pst.setInt(1, hotel_id);
-            pst.setInt(2, room_number);
-            pst.setString(3, room_type);
-            pst.setInt(4, stock_quantity);
-            pst.setInt(5, bed_quantity);
-            pst.setInt(6, meter_square);
-            pst.setBoolean(7, television);
-            pst.setBoolean(8, minibar);
-            pst.setBoolean(9, game_console);
-            pst.setBoolean(10, safe);
-            pst.setBoolean(11, projection);
+            pst.setString(2, room_type);
+            pst.setInt(3, stock_quantity);
+            pst.setInt(4, bed_quantity);
+            pst.setInt(5, meter_square);
+            pst.setBoolean(6, television);
+            pst.setBoolean(7, minibar);
+            pst.setBoolean(8, game_console);
+            pst.setBoolean(9, safe);
+            pst.setBoolean(10, projection);
             pst.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return television;
+    }
+
+
+    public static boolean roomTypeExist(int hotelId, String roomType) {
+        boolean exist = false;
+        String query = "SELECT * FROM rooms WHERE hotel_id = ? AND room_type = ?";
+        try {
+            PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
+            pst.setInt(1, hotelId);
+            pst.setString(2, roomType);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                exist = true;
+            }
+            rs.close();
+            pst.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return exist;
     }
 
 }

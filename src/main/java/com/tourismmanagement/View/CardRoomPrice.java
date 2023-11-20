@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.tourismmanagement.Model.Period.getPeriodNameById;
+
 public class CardRoomPrice extends JPanel {
     private JPanel wrapper; // wrapper değişkenini tanımladık
     private JPanel pnl_room;
@@ -29,6 +31,8 @@ public class CardRoomPrice extends JPanel {
     private JComboBox chbx_period_list;
     private JTextField fld_adult_price;
     private JTextField fld_child_price;
+    private JTextField fld_period_name;
+    private JLabel lbl_period_name;
     private JPanel dinamikPanel;
     private int hotel_id;
     private String board_type_name;
@@ -37,7 +41,6 @@ public class CardRoomPrice extends JPanel {
 
     public CardRoomPrice() {
         setLayout(new BorderLayout());
-        Helper.setLayout();
         add(wrapper);
         setSize(600, 400);
 
@@ -53,12 +56,13 @@ public class CardRoomPrice extends JPanel {
                 return false;
             }
         };
-        Object[] col_room_price = {"Otel Adı", "Oda Numarası", "Pansiyon Tipi", "Sezon", "Yetişkin Fiyatı", "Çocuk Fiyatı"};
+        Object[] col_room_price = {"Otel Adı", "Oda Tipi", "Pansiyon Tipi", "Sezon", "Yetişkin Fiyatı", "Çocuk Fiyatı"};
         mdl_room_price.setColumnIdentifiers(col_room_price);
         row_price_list = new Object[col_room_price.length];
         loadPriceTable();
         tbl_room_price.setModel(mdl_room_price);
         tbl_room_price.getTableHeader().setReorderingAllowed(false);
+        tbl_room_price.getTableHeader().setResizingAllowed(false);
 
         //#ModelRoomPrice
 
@@ -80,18 +84,26 @@ public class CardRoomPrice extends JPanel {
             if (Helper.isFieldEmpty(fld_adult_price) || Helper.isFieldEmpty(fld_child_price)) {
                 Helper.showMsg("fill");
             } else {
-                RoomPrice.add(hotel_id, room_id, board_type_id, period_id, Double.parseDouble(adult_price), Double.parseDouble(child_price));
+                RoomPrice.add(room_id, period_id, board_type_id, Double.parseDouble(adult_price), Double.parseDouble(child_price));
                 loadPriceTable();
                 clearForm();
             }
-//            DynamicPanel dynamicPanel = new DynamicPanel(getHotelId(), getRoomId());
-//            dynamicPanel.setVisible(true);
         });
 
         chbx_hotel_list.addActionListener(e -> {
             updateRoomComboBox();
             updateBoardTypeComboBox();
             updatePeriodComboBox();
+        });
+
+        chbx_period_list.addActionListener(e -> {
+            if (chbx_period_list.getSelectedItem() != null) {
+                String dateRangeString = chbx_period_list.getSelectedItem().toString();
+                int period_id = Period.getPeriodIdByDateRange(getHotelId(), parseDateRange(dateRangeString));
+                setFld_period_name_by_id(period_id);
+            }else {
+                fld_period_name.setText("Seçilen Otele Ait Dönem Bulunamadı");
+            }
         });
     }
 
@@ -136,7 +148,7 @@ public class CardRoomPrice extends JPanel {
         for (RoomPrice obj : RoomPrice.getSpecialList()) {
             int i = 0;
             row_price_list[i++] = obj.getHotel_name();
-            row_price_list[i++] = obj.getRoom_number();
+            row_price_list[i++] = obj.getRoom_type();
             row_price_list[i++] = obj.getBoard_type_name();
             row_price_list[i++] = obj.getSeason();
             row_price_list[i++] = obj.getAdult_price();
@@ -156,9 +168,8 @@ public class CardRoomPrice extends JPanel {
         chbx_room_list.removeAllItems();
         for (Room obj : Room.getRoomList()) {
             if (obj.getHotel_id() == ((Item) chbx_hotel_list.getSelectedItem()).getKey()) {
-                int room_number = obj.getRoom_number();
-                String room_number_str = String.valueOf(room_number);
-                chbx_room_list.addItem(new Item(obj.getId(), room_number_str));
+                String room_type = obj.getRoom_type();
+                chbx_room_list.addItem(new Item(obj.getId(), room_type));
             }
         }
     }
@@ -166,9 +177,8 @@ public class CardRoomPrice extends JPanel {
     public void loadRoomComboBox() {
         chbx_room_list.removeAllItems();
         for (Room obj : Room.getRoomList()) {
-            int room_number = obj.getRoom_number();
-            String room_number_str = String.valueOf(room_number);
-            chbx_room_list.addItem(new Item(obj.getId(), room_number_str));
+            String room_type = obj.getRoom_type();
+            chbx_room_list.addItem(new Item(obj.getId(), room_type));
         }
     }
 
@@ -195,6 +205,10 @@ public class CardRoomPrice extends JPanel {
         }
     }
 
+    public void setFld_period_name_by_id(int period_id) {
+        fld_period_name.setText(getPeriodNameById(period_id));
+    }
+
     private void updatePeriodComboBox() {
         chbx_period_list.removeAllItems();
         ArrayList<Period> periods = Period.getList();
@@ -209,8 +223,7 @@ public class CardRoomPrice extends JPanel {
         try {
             String[] dateParts = dateRangeString.split(" - ");
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-            Date startDate = dateFormat.parse(dateParts[0].replace("Başlangıç: ", ""));
+            Date startDate = dateFormat.parse(dateParts[0].replace( "Başlangıç: ", ""));
             Date endDate = dateFormat.parse(dateParts[1].replace("Bitiş: ", ""));
 
             return new Date[]{startDate, endDate};
@@ -247,4 +260,5 @@ public class CardRoomPrice extends JPanel {
         }
         return board_type_name;
     }
+
 }

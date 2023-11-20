@@ -1,6 +1,8 @@
 package com.tourismmanagement.Model;
 
 import com.tourismmanagement.Helper.DBConnector;
+import com.tourismmanagement.Helper.Helper;
+import com.tourismmanagement.View.CardHotelPanel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,6 +19,18 @@ public class Period {
     private int hotelId;
     private Date startDate;
     private Date endDate;
+    private String periodName;
+
+    public Period() {
+    }
+
+    public Period(int periodId, int hotelId, Date startDate, Date endDate, String periodName) {
+        this.periodId = periodId;
+        this.hotelId = hotelId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.periodName = periodName;
+    }
 
     public static int getPeriodIdByDateRange(int hotelId, Date[] dates) {
         String query = "SELECT period_id FROM periods WHERE hotel_id = ? AND start_date = ? AND end_date = ?";
@@ -37,6 +51,25 @@ public class Period {
 
         // Belirtilen tarihe uygun bir dönem bulunamazsa -1 veya başka bir belirleyici değeri döndürebilirsiniz.
         return -1;
+    }
+
+    public static String getPeriodNameById(int periodId) {
+        String query = "SELECT period_name FROM periods WHERE period_id = ?";
+
+        try (PreparedStatement pst = DBConnector.getInstance().prepareStatement(query)) {
+            pst.setInt(1, periodId);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("period_name");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Belirtilen tarihe uygun bir dönem bulunamazsa -1 veya başka bir belirleyici değeri döndürebilirsiniz.
+        return "";
     }
 
     public int getPeriodId() {
@@ -71,13 +104,20 @@ public class Period {
         this.endDate = endDate;
     }
 
+    public String getPeriodName() {
+        return periodName;
+    }
+
+    public void setPeriodName(String periodName) {
+        this.periodName = periodName;
+    }
+
     public String startEndDateToString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String formattedStartDate = dateFormat.format(startDate);
         String formattedEndDate = dateFormat.format(endDate);
         return "Başlangıç: " + formattedStartDate + " - Bitiş: " + formattedEndDate;
     }
-
 
     public static int getPeriodIdByDate(String dateString, int hotelId) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -115,6 +155,7 @@ public class Period {
             while (rs.next()) {
                 period = new Period();
                 period.setPeriodId(rs.getInt("period_id"));
+                period.setPeriodName(rs.getString("period_name"));
                 period.setHotelId(rs.getInt("hotel_id"));
                 period.setStartDate(rs.getDate("start_date"));
                 period.setEndDate(rs.getDate("end_date"));
@@ -139,6 +180,7 @@ public class Period {
             while (rs.next()) {
                 period = new Period();
                 period.setPeriodId(rs.getInt("period_id"));
+                period.setPeriodName(rs.getString("period_name"));
                 period.setStartDate(rs.getDate("start_date"));
                 period.setEndDate(rs.getDate("end_date"));
                 periodList.add(period);
@@ -149,6 +191,7 @@ public class Period {
 
         return periodList;
     }
+
     public static List<String> getDonemlerFromDatabase(int otel, int oda) {
         List<String> donemler = new ArrayList<>();
         String query = "SELECT start_date, end_date FROM periods WHERE hotel_id = ? AND period_id IN (SELECT DISTINCT period_id FROM pricelist WHERE room_id = ?)";
@@ -170,5 +213,68 @@ public class Period {
         }
 
         return donemler;
+    }
+
+    public static boolean addPeriodsForHotel(int hotelId, Date startDate, Date endDate, String periodName) {
+        String query = "INSERT INTO periods (hotel_id, start_date, end_date, period_name) VALUES (?, ?, ?, ?)";
+        List<Period> periods = getAllPeriodsForHotel(hotelId);
+
+        for (Period existingPeriod : periods) {
+            if (!(existingPeriod.getEndDate().before(startDate) || existingPeriod.getStartDate().after(endDate))) {
+                Helper.showMsg("Bu dönem zaten mevcut.");
+                return false;
+            }
+        }
+
+        try {
+            PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
+            pst.setInt(1, hotelId);
+            pst.setDate(2, new java.sql.Date(startDate.getTime()));
+            pst.setDate(3, new java.sql.Date(endDate.getTime()));
+            pst.setString(4, periodName);
+            int response = pst.executeUpdate();
+
+            if (response == -1) {
+                Helper.showMsg("Ekleme işlemi başarısız oldu.");
+            }
+            return response != -1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    private static List<Period> getAllPeriodsForHotel(int hotelId) {
+        List<Period> periods = new ArrayList<>();
+        String query = "SELECT * FROM periods WHERE hotel_id = ?";
+        try {
+            PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
+            pst.setInt(1, hotelId);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Period period = new Period();
+                period.setPeriodId(rs.getInt("period_id"));
+                period.setHotelId(rs.getInt("hotel_id"));
+                period.setStartDate(rs.getDate("start_date"));
+                period.setEndDate(rs.getDate("end_date"));
+                period.setPeriodName(rs.getString("period_name"));
+                periods.add(period);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return periods;
+    }
+
+    public static boolean delete(int id) {
+        String query = "DELETE FROM periods WHERE period_id = ?";
+        try {
+            PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
+            pst.setInt(1, id);
+            int response = pst.executeUpdate();
+            return response != -1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
