@@ -42,9 +42,9 @@ NOT : GELİŞTİME SÜRECİ DEVAM ETMEKTEDİR.
 
 <img src="src/media/price.png" alt="Diagram_1" width="400" />
 
-*Dinamik rezervasyon*
+*DB Diagram*
 
-<img src="src/media/reservation.png" alt="Diagram_1" width="400" />
+<img src="src/media/DBDiagram.png" alt="Diagram_1" width="1000" />
 
 ## Proje Geliştirme Aşamaları
 
