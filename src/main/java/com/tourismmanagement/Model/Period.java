@@ -2,9 +2,7 @@ package com.tourismmanagement.Model;
 
 import com.tourismmanagement.Helper.DBConnector;
 import com.tourismmanagement.Helper.Helper;
-import com.tourismmanagement.View.CardHotelPanel;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,46 +28,6 @@ public class Period {
         this.startDate = startDate;
         this.endDate = endDate;
         this.periodName = periodName;
-    }
-
-    public static int getPeriodIdByDateRange(int hotelId, Date[] dates) {
-        String query = "SELECT period_id FROM periods WHERE hotel_id = ? AND start_date = ? AND end_date = ?";
-
-        try (PreparedStatement pst = DBConnector.getInstance().prepareStatement(query)) {
-            pst.setInt(1, hotelId);
-            pst.setDate(2, new java.sql.Date(dates[0].getTime()));
-            pst.setDate(3, new java.sql.Date(dates[1].getTime()));
-
-            try (ResultSet rs = pst.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("period_id");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        // Belirtilen tarihe uygun bir dönem bulunamazsa -1 veya başka bir belirleyici değeri döndürebilirsiniz.
-        return -1;
-    }
-
-    public static String getPeriodNameById(int periodId) {
-        String query = "SELECT period_name FROM periods WHERE period_id = ?";
-
-        try (PreparedStatement pst = DBConnector.getInstance().prepareStatement(query)) {
-            pst.setInt(1, periodId);
-
-            try (ResultSet rs = pst.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getString("period_name");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        // Belirtilen tarihe uygun bir dönem bulunamazsa -1 veya başka bir belirleyici değeri döndürebilirsiniz.
-        return "";
     }
 
     public int getPeriodId() {
@@ -117,6 +75,49 @@ public class Period {
         String formattedStartDate = dateFormat.format(startDate);
         String formattedEndDate = dateFormat.format(endDate);
         return "Başlangıç: " + formattedStartDate + " - Bitiş: " + formattedEndDate;
+    }
+
+    public static int getPeriodIdByDateRange(int hotelId, Date[] dates) {
+        String query = "SELECT period_id FROM periods WHERE hotel_id = ? AND start_date = ? AND end_date = ?";
+
+        try (PreparedStatement pst = DBConnector.getInstance().prepareStatement(query)) {
+            pst.setInt(1, hotelId);
+            pst.setDate(2, new java.sql.Date(dates[0].getTime()));
+            pst.setDate(3, new java.sql.Date(dates[1].getTime()));
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("period_id");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Belirtilen tarihe uygun bir dönem bulunamazsa -1 veya başka bir belirleyici değeri döndürebilirsiniz.
+        return -1;
+
+    }
+
+    public static String getPeriodNameById(int periodId) {
+        String query = "SELECT period_name FROM periods WHERE period_id = ?";
+
+        try (PreparedStatement pst = DBConnector.getInstance().prepareStatement(query)) {
+            pst.setInt(1, periodId);
+
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("period_name");
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // Belirtilen tarihe uygun bir dönem bulunamazsa -1 veya başka bir belirleyici değeri döndürebilirsiniz.
+        return "";
     }
 
     public static int getPeriodIdByDate(String dateString, int hotelId) {
@@ -243,8 +244,7 @@ public class Period {
         }
     }
 
-
-    private static List<Period> getAllPeriodsForHotel(int hotelId) {
+    public static List<Period> getAllPeriodsForHotel(int hotelId) {
         List<Period> periods = new ArrayList<>();
         String query = "SELECT * FROM periods WHERE hotel_id = ?";
         try {

@@ -85,7 +85,7 @@ public class CardHomePanel extends JPanel {
                 return;
             }
             int id = (int) tbl_reservation_list.getValueAt(selectedRow, 0);
-            if (Reservation.delete(id)) {
+            if (Reservation.delete(id, reservationIdToRoomId(id))) {
                 Helper.showMsg("Rezervasyon silindi!");
                 loadReservationModel();
             } else {
@@ -129,6 +129,10 @@ public class CardHomePanel extends JPanel {
 
         JPanel totalIncomeChart1 = JGraph.createHotelTotalIncomeChart(((Item) chbx_hotel_list.getSelectedItem()).getKey());
         pnl_graph.add(totalIncomeChart1, "cell 2 0,grow");
+    }
+
+    public int reservationIdToRoomId(int reservationId){
+        return Reservation.getReservationById(reservationId).getRoom_id();
     }
 
 }

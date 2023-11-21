@@ -7,6 +7,8 @@ import com.tourismmanagement.Model.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,10 +23,10 @@ public class CardRoomPrice extends JPanel {
     private JTable tbl_room_price;
     private JPanel pnl_room_price;
     private JPanel pnl_hotel_control_button;
-    private JButton fiyatAyarlaButton;
-    private JButton btn_hotel_update;
-    private JButton btn_hotel_delete;
-    private JButton btn_hotel_panel_clear;
+    private JButton btn_add;
+    private JButton btn_room_update;
+    private JButton btn_room_delete;
+    private JButton btn_room_panel_clear;
     private JComboBox chbx_hotel_list; // chbx_hotel_list değişkenini tanımladık
     private JComboBox chbx_room_list; // chbx_room_list değişkenini tanımladık
     private JComboBox chbx_board_type_list;
@@ -71,7 +73,7 @@ public class CardRoomPrice extends JPanel {
             fillFormWithSelectedRow();
         });
 
-        fiyatAyarlaButton.addActionListener(e -> {
+        btn_add.addActionListener(e -> {
             int hotel_id = ((Item) chbx_hotel_list.getSelectedItem()).getKey();
             int room_id = ((Item) chbx_room_list.getSelectedItem()).getKey();
             chbx_period_list.getSelectedItem();
@@ -105,6 +107,45 @@ public class CardRoomPrice extends JPanel {
                 fld_period_name.setText("Seçilen Otele Ait Dönem Bulunamadı");
             }
         });
+
+        btn_room_update.addActionListener(e -> {
+            int selectedRow = tbl_room_price.getSelectedRow();
+            if (selectedRow > -1) {
+                int hotel_id = ((Item) chbx_hotel_list.getSelectedItem()).getKey();
+                int room_id = ((Item) chbx_room_list.getSelectedItem()).getKey();
+                chbx_period_list.getSelectedItem();
+                int board_type_id = ((Item) chbx_board_type_list.getSelectedItem()).getKey();
+                String dateRangeString = chbx_period_list.getSelectedItem().toString();
+                int period_id = Period.getPeriodIdByDateRange(hotel_id, parseDateRange(dateRangeString));
+                String adult_price = (fld_adult_price.getText());
+                String child_price = (fld_child_price.getText());
+
+                if (Helper.isFieldEmpty(fld_adult_price) || Helper.isFieldEmpty(fld_child_price)) {
+                    Helper.showMsg("fill");
+                } else {
+                    RoomPrice.update(Integer.parseInt(tbl_room_price.getValueAt(selectedRow, 0).toString()), room_id, period_id, board_type_id, Double.parseDouble(adult_price), Double.parseDouble(child_price));
+                    loadPriceTable();
+                    clearForm();
+                    Helper.showMsg("done");
+                }
+            } else {
+                Helper.showMsg("Lütfen güncellemek istediğiniz bilgileri giriniz");
+            }
+        });
+        btn_room_delete.addActionListener(e -> {
+            int selectedRow = tbl_room_price.getSelectedRow();
+            if (selectedRow > -1) {
+                int id = (int) tbl_room_price.getValueAt(selectedRow, 0);
+                RoomPrice.delete(id);
+                loadPriceTable();
+                clearForm();
+                Helper.showMsg("done");
+            } else {
+                Helper.showMsg("Lütfen silmek istediğiniz bilgileri giriniz");
+            }
+        });
+
+        btn_room_panel_clear.addActionListener(e -> clearForm());
     }
 
     private void clearForm() {

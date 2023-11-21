@@ -357,9 +357,23 @@ public class CardReservation extends JPanel {
         DefaultTableModel clearModel = (DefaultTableModel) tbl_room_list.getModel();
         clearModel.setRowCount(0);
         ArrayList<Room> searchedRooms = Room.roomSearchList(city, startDate, endDate);
+        int totalPersonCount = adultCount + childCount;
         for (Room obj : searchedRooms) {
-            if (obj.getBed_quantity() < adultCount + childCount) {
-                continue;
+            if (totalPersonCount == 1) {
+                // Kişi sayısı 1 ise, yatak sayısı 1 olan odaları listele
+                if (obj.getBed_quantity() != 1) {
+                    continue;
+                }
+            } else if (totalPersonCount == 2) {
+                // Kişi sayısı 2 ise, yatak sayısı 2 olan odaları listele
+                if (obj.getBed_quantity() != 2) {
+                    continue;
+                }
+            } else if (totalPersonCount > 2) {
+                // Kişi sayısı 2'den fazla ise, yatak sayısı 3 veya daha fazla olan odaları listele
+                if (obj.getBed_quantity() < 3) {
+                    continue;
+                }
             }
             clearModel.setRowCount(0);
             roomList.clear();

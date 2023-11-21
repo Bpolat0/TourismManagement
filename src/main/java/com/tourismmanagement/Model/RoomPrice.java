@@ -2,7 +2,6 @@ package com.tourismmanagement.Model;
 
 import com.tourismmanagement.Helper.DBConnector;
 import com.tourismmanagement.Helper.Helper;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,6 +40,9 @@ public class RoomPrice {
         this.adult_price = adult_price;
         this.child_price = child_price;
     }
+
+
+
 
     public int getId() {
         return id;
@@ -149,7 +151,35 @@ public class RoomPrice {
         }
     }
 
-    private static boolean getFetch(int roomId, int periodId, int boardTypeId) {
+    public static void update(int id, int room_id, int period_id, int board_type_id, double adult_price, double child_price) {
+        String query = "UPDATE room_prices SET room_id = ?, period_id = ?, board_types_id = ?, adult_price = ?, child_price = ? WHERE id = ?";
+        try {
+            PreparedStatement pr = DBConnector.getInstance().prepareStatement(query);
+            pr.setInt(1, room_id);
+            pr.setInt(2, period_id);
+            pr.setInt(3, board_type_id);
+            pr.setDouble(4, adult_price);
+            pr.setDouble(5, child_price);
+            pr.setInt(6, id);
+            pr.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void delete(int id) {
+        String query = "DELETE FROM room_prices WHERE id = ?";
+        try {
+            PreparedStatement pr = DBConnector.getInstance().prepareStatement(query);
+            pr.setInt(1, id);
+            pr.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean getFetch(int roomId, int periodId, int boardTypeId) {
         String query = "SELECT COUNT(*) FROM room_prices WHERE room_id = ? AND period_id = ? AND board_types_id = ?";
 
         try (PreparedStatement pst = DBConnector.getInstance().prepareStatement(query)) {
@@ -224,9 +254,6 @@ public class RoomPrice {
         }
         return roomPriceList;
     }
-
-
-
 
 }
 

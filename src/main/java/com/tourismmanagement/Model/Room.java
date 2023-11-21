@@ -2,7 +2,6 @@ package com.tourismmanagement.Model;
 
 import com.tourismmanagement.Helper.DBConnector;
 import com.tourismmanagement.Helper.Helper;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,6 +40,8 @@ public class Room {
 
     public Room() {
     }
+
+
 
     public String getHotel_name() {
         return hotel_name;
@@ -311,13 +312,90 @@ public class Room {
             pst.setBoolean(8, game_console);
             pst.setBoolean(9, safe);
             pst.setBoolean(10, projection);
-            pst.executeUpdate();
+            int result = pst.executeUpdate();
+
+            if (result == -1) {
+                Helper.showMsg("error");
+            } else {
+                Helper.showMsg("done");
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return television;
+        return true;
     }
 
+    public static boolean updateRoom(int id, int hotelId, String roomType, int i, int i1, int i2, boolean television, boolean minibar, boolean gameConsole, boolean safe, boolean projection) {
+        //update room
+        String query = "UPDATE rooms SET hotel_id = ?, room_type = ?, stock_quantity = ?, bed_quantity = ?, meter_square = ?, television = ?, minibar = ?, game_console = ?, safe = ?, projection = ? WHERE id = ?";
+        if (i == 0) {
+            Helper.showMsg("Stok sayısı 0 olamaz!");
+            return false;
+        } else if (i1 == 0) {
+            Helper.showMsg("Yatak sayısı 0 olamaz!");
+            return false;
+        } else if (i2 == 0) {
+            Helper.showMsg("Metre kare 0 olamaz!");
+            return false;
+        } else if (roomType.equals("")) {
+            Helper.showMsg("Oda tipi boş bırakılamaz!");
+            return false;
+        } else if (hotelId == 0) {
+            Helper.showMsg("Otel seçimi yapılmadı!");
+            return false;
+        } else if (i < 0) {
+            Helper.showMsg("Stok sayısı negatif olamaz!");
+            return false;
+        } else if (i1 < 0) {
+            Helper.showMsg("Yatak sayısı negatif olamaz!");
+            return false;
+        } else if (i2 < 0) {
+            Helper.showMsg("Metre kare negatif olamaz!");
+            return false;
+        }
+        try {
+            PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
+            pst.setInt(1, hotelId);
+            pst.setString(2, roomType);
+            pst.setInt(3, i);
+            pst.setInt(4, i1);
+            pst.setInt(5, i2);
+            pst.setBoolean(6, television);
+            pst.setBoolean(7, minibar);
+            pst.setBoolean(8, gameConsole);
+            pst.setBoolean(9, safe);
+            pst.setBoolean(10, projection);
+            pst.setInt(11, id);
+            int result = pst.executeUpdate();
+
+            if (result == -1) {
+                Helper.showMsg("error");
+            } else {
+                Helper.showMsg("done");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
+    }
+
+    public static boolean deleteRoom(int id) {
+        String query = "DELETE FROM rooms WHERE id = ?";
+        try {
+            PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
+            pst.setInt(1, id);
+            int result = pst.executeUpdate();
+
+            if (result == -1) {
+                Helper.showMsg("error");
+            } else {
+                Helper.showMsg("done");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return true;
+    }
 
     public static boolean roomTypeExist(int hotelId, String roomType) {
         boolean exist = false;

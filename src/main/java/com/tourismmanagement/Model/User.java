@@ -2,7 +2,6 @@ package com.tourismmanagement.Model;
 
 import com.tourismmanagement.Helper.DBConnector;
 import com.tourismmanagement.Helper.Helper;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

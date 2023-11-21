@@ -1,6 +1,5 @@
 package com.tourismmanagement.View;
 
-import com.tourismmanagement.Helper.DBConnector;
 import com.tourismmanagement.Helper.Helper;
 import com.tourismmanagement.Helper.Item;
 import com.tourismmanagement.Model.Hotel;
@@ -9,9 +8,8 @@ import com.tourismmanagement.Model.Room;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import static com.tourismmanagement.Model.Room.addRoom;
 
@@ -30,9 +28,9 @@ public class CardRoomPanel extends JPanel {
     private JCheckBox cbx_projection;
     private JPanel pnl_hotel_control_button;
     private JButton btn_rooml_add;
-    private JButton btn_hotel_update;
-    private JButton btn_hotel_delete;
-    private JButton btn_hotel_panel_clear;
+    private JButton btn_room_update;
+    private JButton btn_room_delete;
+    private JButton btn_rooml_panel_clear;
     private JComboBox chbx_hotel_list;
     private JComboBox chbx_room_type;
     private JTextField fld_room_number;
@@ -98,6 +96,49 @@ public class CardRoomPanel extends JPanel {
         selectionModel.addListSelectionListener(e -> {
             fillFormWithSelectedRoom();
         });
+        btn_room_update.addActionListener(e -> {
+            int hotel_id = ((Item) chbx_hotel_list.getSelectedItem()).getKey();
+            String room_type = fld_room_type.getText();
+            String stock_quantity = fld_room_stock.getText();
+            String bed_quantity = fld_room_bed.getText();
+            String meter_square = fld_room_msq.getText();
+            boolean television = cbx_television.isSelected();
+            boolean minibar = cbx_minibar.isSelected();
+            boolean game_console = cbx_game_console.isSelected();
+            boolean safe = cbx_safe.isSelected();
+            boolean projection = cbx_projection.isSelected();
+
+            if (Helper.isFieldEmpty(fld_room_type) || Helper.isFieldEmpty(fld_room_stock) || Helper.isFieldEmpty(fld_room_bed) || Helper.isFieldEmpty(fld_room_msq)) {
+                Helper.showMsg("fill");
+            } else {
+                if (Room.updateRoom(Integer.parseInt(fld_room_number.getText()), hotel_id, room_type, Integer.parseInt(stock_quantity), Integer.parseInt(bed_quantity), Integer.parseInt(meter_square), television, minibar, game_console, safe, projection)) {
+                    loadRoomModel();
+                    clearForm();
+                    Helper.showMsg("done");
+                }else {
+                    Helper.showMsg("error");
+                }
+            }
+
+        });
+        btn_room_delete.addActionListener(e -> {
+            int selectedRow = tbl_room_list.getSelectedRow();
+            if (selectedRow != -1) {
+                int id = (int) tbl_room_list.getValueAt(selectedRow, 0);
+                if (Room.deleteRoom(id)) {
+                    loadRoomModel();
+                    clearForm();
+                    Helper.showMsg("Oda silindi.");
+                }else {
+                    Helper.showMsg("Oda silinemedi.");
+                }
+            }
+            else {
+                Helper.showMsg("Lütfen silmek istediğiniz odayı seçiniz.");
+            }
+        });
+
+        btn_rooml_panel_clear.addActionListener(e -> clearForm());
     }
 
     public void fillFormWithSelectedRoom() {

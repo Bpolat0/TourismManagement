@@ -293,7 +293,6 @@ public class Hotel {
         return hotelList;
     }
 
-
     public static boolean add(String name, String city, String region, String address, String email, String phone, String star, boolean freePark, boolean freeWifi, boolean swimmingPool, boolean fitnessCenter, boolean hotelConcierge, boolean spa, boolean roomService, boolean ultraAllInclusive, boolean allInclusive, boolean bedAndBreakfast, boolean fullBoard, boolean halfBoard, boolean roomOnly, boolean nonAlcoholFull) {
         String query = "INSERT INTO hotels (name, city, region, address, email, phone, star,freePark, freeWifi, swimmingPool, fitnessCenter, hotelConcierge, spa, roomService, ultraAllInclusive, allInclusive, bedAndBreakfast, fullBoard, halfBoard,roomOnly, nonAlcoholFull ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         Hotel findHotel = Hotel.getFetch(name, email, phone);
@@ -327,16 +326,21 @@ public class Hotel {
             pr.setBoolean(21, nonAlcoholFull);
             int response = pr.executeUpdate();
 
+            //close connection
+            pr.close();
+
+
             if (response == -1) {
                 Helper.showMsg("error");
             }
             return response != -1;
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static Hotel getFetch(String name, String email, String phone) {
+    public static Hotel getFetch(String name, String email, String phone) {
         Hotel obj = null;
         String query = "SELECT * FROM hotels WHERE name = ? AND email = ? AND phone = ?";
 
@@ -366,6 +370,10 @@ public class Hotel {
 
 
             }
+            //close connection
+            rs.close();
+            pr.close();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -394,6 +402,9 @@ public class Hotel {
 
             int response = pr.executeUpdate();
 
+            //close connection
+            pr.close();
+
             if (response == -1) {
                 Helper.showMsg("error");
             } else {
@@ -411,7 +422,13 @@ public class Hotel {
         try {
             pr = DBConnector.getInstance().prepareStatement(query);
             pr.setInt(1, id);
+
+            //close connection
+            pr.close();
+
             return pr.executeUpdate() != -1;
+
+
         } catch (SQLException e) {
             return false;
         }

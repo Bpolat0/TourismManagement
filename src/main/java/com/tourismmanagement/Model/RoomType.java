@@ -1,7 +1,6 @@
 package com.tourismmanagement.Model;
 
 import com.tourismmanagement.Helper.DBConnector;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -55,7 +54,5 @@ public class RoomType {
         }
         return roomTypeList;
     }
-
-
 
 }

@@ -2,7 +2,6 @@ package com.tourismmanagement.Model;
 
 import com.tourismmanagement.Helper.DBConnector;
 import com.tourismmanagement.Helper.Helper;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -237,7 +236,7 @@ public class Reservation {
         }
     }
 
-    public static boolean delete(int id) {
+    public static boolean delete(int id, int room_id) {
         String reservationQuery = "DELETE FROM reservations WHERE id = ?";
         String updateStockQuery = "UPDATE rooms SET stock_quantity = stock_quantity + 1 WHERE id = ?";
         try {
@@ -254,7 +253,7 @@ public class Reservation {
 
             // Stok miktarını güncelleme
             PreparedStatement pstStockUpdate = DBConnector.getInstance().prepareStatement(updateStockQuery);
-            pstStockUpdate.setInt(1, id);
+            pstStockUpdate.setInt(1, room_id);
 
             int responseStockUpdate = pstStockUpdate.executeUpdate();
             pstStockUpdate.close();
@@ -269,6 +268,34 @@ public class Reservation {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static Reservation getReservationById(int reservationId) {
+        String query = "SELECT * FROM reservations WHERE id = ?";
+        Reservation obj;
+        try {
+            PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
+            pst.setInt(1, reservationId);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                obj = new Reservation();
+                obj.setId(rs.getInt("id"));
+                obj.setHotel_id(rs.getInt("hotel_id"));
+                obj.setRoom_id(rs.getInt("room_id"));
+                obj.setStart_date(rs.getDate("start_date"));
+                obj.setEnd_date(rs.getDate("end_date"));
+                obj.setCustomer_name(rs.getString("customer_name"));
+                obj.setCustomer_tc(rs.getInt("customer_tc"));
+                obj.setCustomer_email(rs.getString("customer_email"));
+                obj.setTotal_price(rs.getDouble("total_price"));
+                return obj;
+            }
+            rs.close();
+            pst.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 
 

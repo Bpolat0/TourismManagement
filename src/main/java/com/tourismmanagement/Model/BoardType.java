@@ -1,10 +1,6 @@
 package com.tourismmanagement.Model;
 
 import com.tourismmanagement.Helper.DBConnector;
-import com.tourismmanagement.View.CardHotelPanel;
-import com.tourismmanagement.View.CardHotelPanel.*;
-
-import javax.swing.text.View;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -83,6 +79,10 @@ public class BoardType {
                 boardTypeList.add(obj);
 
             }
+            //close connection
+            rs.close();
+            st.close();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -122,6 +122,10 @@ public class BoardType {
                 boardTypeList.add(obj);
 
             }
+            //close connection
+            rs.close();
+            pr.close();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -142,8 +146,10 @@ public class BoardType {
                 obj.setHotel_id(rs.getInt("hotel_id"));
                 obj.setBoard_type_id(rs.getInt("board_type_id"));
                 boardTypeList.add(obj);
-
             }
+            //close connection
+            rs.close();
+            st.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -172,6 +178,10 @@ public class BoardType {
                 String pansiyonTipi = rs.getString("board_type_name");
                 pansiyonTipleri.add(pansiyonTipi);
             }
+
+            //close connection
+            rs.close();
+            pst.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
