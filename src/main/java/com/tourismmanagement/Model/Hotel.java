@@ -329,7 +329,6 @@ public class Hotel {
             //close connection
             pr.close();
 
-
             if (response == -1) {
                 Helper.showMsg("error");
             }
@@ -380,8 +379,8 @@ public class Hotel {
         return obj;
     }
 
-    public static boolean update(int id, String name, String city, String region, String address, String email, String phone, String star, boolean freePark, boolean freeWifi, boolean swimmingPool, boolean fitnessCenter, boolean hotelConcierge, boolean spa, boolean roomService) {
-        String query = "UPDATE hotels SET name = ?, city = ?, region = ?, address = ?, email = ?, phone = ?, star = ?, freePark = ?, freeWifi = ?, swimmingPool = ?, fitnessCenter = ?, hotelConcierge = ?, spa = ?, roomService = ? WHERE id = ?";
+    public static boolean update(int id, String name, String city, String region, String address, String email, String phone, String star, boolean freePark, boolean freeWifi, boolean swimmingPool, boolean fitnessCenter, boolean hotelConcierge, boolean spa, boolean roomService, boolean ultraAllInclusive, boolean allInclusive, boolean bedAndBreakfast, boolean fullBoard, boolean halfBoard, boolean roomOnly, boolean nonAlcoholFull) {
+        String query = "UPDATE hotels SET name = ?, city = ?, region = ?, address = ?, email = ?, phone = ?, star = ?, freePark = ?, freeWifi = ?, swimmingPool = ?, fitnessCenter = ?, hotelConcierge = ?, spa = ?, roomService = ?, ultraAllInclusive = ?, allInclusive = ?, bedAndBreakfast = ?, fullBoard = ?, halfBoard = ?, roomOnly = ?, nonAlcoholFull = ? WHERE id = ?";
         try {
             PreparedStatement pr = DBConnector.getInstance().prepareStatement(query);
             pr.setString(1, name);
@@ -398,7 +397,14 @@ public class Hotel {
             pr.setBoolean(12, hotelConcierge);
             pr.setBoolean(13, spa);
             pr.setBoolean(14, roomService);
-            pr.setInt(15, id);
+            pr.setBoolean(15, ultraAllInclusive);
+            pr.setBoolean(16, allInclusive);
+            pr.setBoolean(17, bedAndBreakfast);
+            pr.setBoolean(18, fullBoard);
+            pr.setBoolean(19, halfBoard);
+            pr.setBoolean(20, roomOnly);
+            pr.setBoolean(21, nonAlcoholFull);
+            pr.setInt(22, id);
 
             int response = pr.executeUpdate();
 
@@ -423,11 +429,7 @@ public class Hotel {
             pr = DBConnector.getInstance().prepareStatement(query);
             pr.setInt(1, id);
 
-            //close connection
-            pr.close();
-
             return pr.executeUpdate() != -1;
-
 
         } catch (SQLException e) {
             return false;

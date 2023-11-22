@@ -69,6 +69,11 @@ public class CardReservation extends JPanel {
         pnl_date_start.add(JDateChooser1);
         pnl_date_end.add(JDateChooser2);
 
+        SpinnerModel spinnerModel = new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1);
+        SpinnerModel spinnerModel1 = new SpinnerNumberModel(0, 0, Integer.MAX_VALUE, 1);
+        spn_adult.setModel(spinnerModel);
+        spn_child.setModel(spinnerModel1);
+
         //ModelRoomList
         mdl_room_list = new DefaultTableModel() {
             @Override
@@ -353,48 +358,41 @@ public class CardReservation extends JPanel {
     }
 
     private void loadRoomSearchModel(String city, Date startDate, Date endDate, int adultCount, int childCount) {
-
         DefaultTableModel clearModel = (DefaultTableModel) tbl_room_list.getModel();
         clearModel.setRowCount(0);
+
         ArrayList<Room> searchedRooms = Room.roomSearchList(city, startDate, endDate);
         int totalPersonCount = adultCount + childCount;
+
         for (Room obj : searchedRooms) {
-            if (totalPersonCount == 1) {
-                // Kişi sayısı 1 ise, yatak sayısı 1 olan odaları listele
-                if (obj.getBed_quantity() != 1) {
-                    continue;
-                }
-            } else if (totalPersonCount == 2) {
-                // Kişi sayısı 2 ise, yatak sayısı 2 olan odaları listele
-                if (obj.getBed_quantity() != 2) {
-                    continue;
-                }
-            } else if (totalPersonCount > 2) {
-                // Kişi sayısı 2'den fazla ise, yatak sayısı 3 veya daha fazla olan odaları listele
-                if (obj.getBed_quantity() < 3) {
-                    continue;
-                }
+            if (totalPersonCount == 1 && obj.getBed_quantity() != 1) {
+                continue;
+            } else if (totalPersonCount == 2 && obj.getBed_quantity() != 2) {
+                continue;
+            } else if (totalPersonCount > 2 && obj.getBed_quantity() < 3) {
+                continue;
             }
-            clearModel.setRowCount(0);
-            roomList.clear();
+
             Object[] row_room_list = new Object[9];
-            int i = 0;
-            row_room_list[i++] = obj.getHotel_name();
-            row_room_list[i++] = obj.getRoom_type();
-            row_room_list[i++] = obj.getBed_quantity();
-            row_room_list[i++] = obj.getMeter_square();
-            row_room_list[i++] = obj.isTelevision() ? "Var" : "Yok";
-            row_room_list[i++] = obj.isMinibar() ? "Var" : "Yok";
-            row_room_list[i++] = obj.isGame_console() ? "Var" : "Yok";
-            row_room_list[i++] = obj.isSafe() ? "Var" : "Yok";
-            row_room_list[i++] = obj.isProjection() ? "Var" : "Yok";
-            mdl_room_list.addRow(row_room_list);
+            row_room_list[0] = obj.getHotel_name();
+            row_room_list[1] = obj.getRoom_type();
+            row_room_list[2] = obj.getBed_quantity();
+            row_room_list[3] = obj.getMeter_square();
+            row_room_list[4] = obj.isTelevision() ? "Var" : "Yok";
+            row_room_list[5] = obj.isMinibar() ? "Var" : "Yok";
+            row_room_list[6] = obj.isGame_console() ? "Var" : "Yok";
+            row_room_list[7] = obj.isSafe() ? "Var" : "Yok";
+            row_room_list[8] = obj.isProjection() ? "Var" : "Yok";
+
+            DefaultTableModel model = (DefaultTableModel) tbl_room_list.getModel();
+            model.addRow(row_room_list);
 
             if (!roomList.contains(obj)) {
                 roomList.add(obj);
             }
         }
     }
+
 
     private void loadSelectedRoomIdCombo() {
         cbx_room.removeAllItems(); // Combobox içeriğini temizle

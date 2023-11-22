@@ -108,11 +108,11 @@ public class CardRoomPanel extends JPanel {
             boolean safe = cbx_safe.isSelected();
             boolean projection = cbx_projection.isSelected();
 
+
             if (Helper.isFieldEmpty(fld_room_type) || Helper.isFieldEmpty(fld_room_stock) || Helper.isFieldEmpty(fld_room_bed) || Helper.isFieldEmpty(fld_room_msq)) {
                 Helper.showMsg("fill");
             } else {
                 if (Room.updateRoom(Integer.parseInt(fld_room_number.getText()), hotel_id, room_type, Integer.parseInt(stock_quantity), Integer.parseInt(bed_quantity), Integer.parseInt(meter_square), television, minibar, game_console, safe, projection)) {
-                    loadRoomModel();
                     clearForm();
                     Helper.showMsg("done");
                 }else {

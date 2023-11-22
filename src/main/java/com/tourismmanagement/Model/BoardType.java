@@ -1,6 +1,8 @@
 package com.tourismmanagement.Model;
 
 import com.tourismmanagement.Helper.DBConnector;
+
+import javax.swing.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,6 +26,9 @@ public class BoardType {
     public BoardType() {
 
     }
+
+
+
     public int getId() {
         return id;
     }
@@ -63,6 +68,62 @@ public class BoardType {
     public void setBoard_type_name(String board_type_name) {
         this.board_type_name = board_type_name;
     }
+
+    public static boolean addBoardTypeByHotelID(int hotel_id, int board_type_id){
+        //same hotel board type check
+        BoardType.findBoardTypeByHotelID(hotel_id, board_type_id);
+
+        if (BoardType.findBoardTypeByHotelID(hotel_id, board_type_id) == true) {
+            JOptionPane.showMessageDialog(null, "Ayı aynı pansiyon tipi ekleyemezsiniz!");
+            return false;
+        }
+
+        String query = "INSERT INTO hotel_boardtypes (hotel_id, board_type_id) VALUES (?, ?)";
+        try {
+            PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
+            pst.setInt(1, hotel_id);
+            pst.setInt(2, board_type_id);
+            pst.executeUpdate();
+            pst.close();
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private static boolean findBoardTypeByHotelID(int hotelId, int boardTypeId) {
+        String query = "SELECT * FROM hotel_boardtypes WHERE hotel_id = ? AND board_type_id = ?";
+        try {
+            PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
+            pst.setInt(1, hotelId);
+            pst.setInt(2, boardTypeId);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+            rs.close();
+            pst.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return false;
+    }
+
+    public static boolean deleteBoardTypes(int hotelID, int boardTypeID) {
+        String query = "DELETE FROM hotel_boardtypes WHERE hotel_id = ? AND board_type_id = ?";
+        try {
+            PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
+            pst.setInt(1, hotelID);
+            pst.setInt(2, boardTypeID);
+            pst.executeUpdate();
+            pst.close();
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public static ArrayList<BoardType> getOnlyBoardTypeList(){
         ArrayList<BoardType> boardTypeList = new ArrayList<>();

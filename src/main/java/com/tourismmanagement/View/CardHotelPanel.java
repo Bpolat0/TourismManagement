@@ -7,10 +7,16 @@ import com.tourismmanagement.Model.BoardType;
 import com.tourismmanagement.Model.Hotel;
 import com.tourismmanagement.Model.Period;
 import net.miginfocom.swing.MigLayout;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Enumeration;
+
+import static com.tourismmanagement.Model.BoardType.addBoardTypeByHotelID;
+import static com.tourismmanagement.Model.BoardType.deleteBoardTypes;
 
 public class CardHotelPanel extends JPanel {
     private JPanel pnl_add_hotel;
@@ -76,6 +82,8 @@ public class CardHotelPanel extends JPanel {
     private JTextField fld_hotel_period;
     private JPanel pnl_boardAndPeriod_control;
     private JComboBox chbx_period_list;
+    private JButton btn_add_hotel_board;
+    private JButton btn_delete_hotel_board;
     private JDateChooser JDateChooser1;
     private JDateChooser JDateChooser2;
 
@@ -136,7 +144,7 @@ public class CardHotelPanel extends JPanel {
         //#ModelBoardType
 
         //ModelPeriod
-        mdl_period_list = new DefaultTableModel(){
+        mdl_period_list = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; // Tüm hücrelerin düzenlenmesini engeller
@@ -162,14 +170,17 @@ public class CardHotelPanel extends JPanel {
             setTbl_hotel_list();
             if (!e.getValueIsAdjusting()) {
                 // Seçilen otelin id'sini alın
-                int selectedRow = tbl_hotel_list.getSelectedRow();
-                int id = (int) tbl_hotel_list.getValueAt(selectedRow, 0);
-                String.valueOf(id);
-                setFld_hotel_period(String.valueOf(id));
-                // loadBoardModel() metodunu id parametresi ile çağırın
-                loadBoardModel(String.valueOf(id));
-                loadPeriodModel(String.valueOf(id));
-                loadPeriodComboBox(id);
+                if (tbl_hotel_list.getSelectedRow() != -1) {
+                    int selectedRow = tbl_hotel_list.getSelectedRow();
+                    int id = (int) tbl_hotel_list.getValueAt(selectedRow, 0);
+                    String.valueOf(id);
+                    setFld_hotel_period(String.valueOf(id));
+                    // loadBoardModel() metodunu id parametresi ile çağırın
+                    loadBoardModel(String.valueOf(id));
+                    loadPeriodModel(String.valueOf(id));
+                    loadPeriodComboBox(id);
+                }
+
             }
         });
 
@@ -205,7 +216,6 @@ public class CardHotelPanel extends JPanel {
                     Helper.showMsg("done");
                     clearHotelAddPanel();
                     loadHotelModel();
-
                 } else {
                     Helper.showMsg("error");
                 }
@@ -231,13 +241,23 @@ public class CardHotelPanel extends JPanel {
                 boolean hotelConcierge = cbx_hotel_concierge.isSelected();
                 boolean spa = cbx_spa.isSelected();
                 boolean roomService = cbx_room_service.isSelected();
+                boolean ultraAllInclusive = cbx_ultra_all_inclusive.isSelected();
+                boolean allInclusive = cbx_alI_inclusive.isSelected();
+                boolean bedAndBreakfast = cbx_room_breakfast.isSelected();
+                boolean fullBoard = cbx_full_board.isSelected();
+                boolean halfBoard = cbx_half_board.isSelected();
+                boolean roomOnly = cbx_room_only.isSelected();
+                boolean nonAlcoholFull = cbx_alcohol_free.isSelected();
+
                 // update metodunu çağıralım
 
-                if (Hotel.update(id, name, city, region, address, email, phone, star, freePark, freeWifi, swimmingPool, fitnessCenter, hotelConcierge, spa, roomService)) {
+                if (Hotel.update(id, name, city, region, address, email, phone, star, freePark, freeWifi, swimmingPool, fitnessCenter, hotelConcierge, spa, roomService, ultraAllInclusive, allInclusive, bedAndBreakfast, fullBoard, halfBoard, roomOnly, nonAlcoholFull)) {
                     Helper.showMsg("done");
                     clearHotelAddPanel();
+                    loadHotelModel();
                 } else {
                     Helper.showMsg("error");
+                    loadHotelModel();
                 }
             } else {
                 // eğer hiçbir satır seçilmemişse
@@ -247,21 +267,24 @@ public class CardHotelPanel extends JPanel {
 
         btn_hotel_delete.addActionListener(e -> {
             if (tbl_hotel_list.getSelectedRow() != -1) {
-                if (Helper.confirm("sure")) {
-                    int id = (int) tbl_hotel_list.getValueAt(tbl_hotel_list.getSelectedRow(), 0);
-                    if (Hotel.delete(id)) {
-                        Helper.showMsg("done");
-                        loadHotelModel();
-                    } else {
-                        Helper.showMsg("error");
-                    }
-                } else {
+                // seçilen satırdaki değerleri alalım
+                int id = (int) tbl_hotel_list.getValueAt(tbl_hotel_list.getSelectedRow(), 0);
+                System.out.println(id);
+                // delete metodunu çağıralım
+                if (Hotel.delete(id)) {
+                    Helper.showMsg("done");
                     clearHotelAddPanel();
+                    loadHotelModel();
+                } else {
+                    Helper.showMsg("error");
+                    loadHotelModel();
                 }
             } else {
+                // eğer hiçbir satır seçilmemişse
                 Helper.showMsg("Lütfen silmek istediğiniz oteli seçiniz!");
             }
         });
+
         btn_hotel_panel_clear.addActionListener(e -> {
             clearHotelAddPanel();
         });
@@ -299,6 +322,59 @@ public class CardHotelPanel extends JPanel {
                 }
             } else {
                 Helper.showMsg("Lütfen silmek istediğiniz dönemi seçiniz!");
+            }
+        });
+
+        btn_add_hotel_board.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (tbl_hotel_list.getSelectedRow() != -1) {
+                    if (Helper.confirm("sure")) {
+                        int hotelID = Integer.parseInt(fld_hotel_period.getText());
+                        boolean ultraAllInclusive = cbx_ultra_all_inclusive.isSelected();
+                        boolean allInclusive = cbx_alI_inclusive.isSelected();
+                        boolean bedAndBreakfast = cbx_room_breakfast.isSelected();
+                        boolean fullBoard = cbx_full_board.isSelected();
+                        boolean halfBoard = cbx_half_board.isSelected();
+                        boolean roomOnly = cbx_room_only.isSelected();
+                        boolean nonAlcoholFull = cbx_alcohol_free.isSelected();
+                        if (addBoardTypesByHotelID(hotelID, ultraAllInclusive, allInclusive, bedAndBreakfast, fullBoard, halfBoard, roomOnly, nonAlcoholFull)) {
+                            Helper.showMsg("done");
+                            loadBoardModel(fld_hotel_period.getText());
+                        } else {
+                            Helper.showMsg("error");
+                        }
+                    }
+                }else {
+                    Helper.showMsg("Lütfen pansiyon tipi eklemek istediğiniz oteli seçiniz!");
+                }
+            }
+        });
+
+        btn_delete_hotel_board.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //deleteBoardTypesByHotelID
+                if (tbl_hotel_list.getSelectedRow() != -1) {
+                    if (Helper.confirm("sure")) {
+                        int hotelID = Integer.parseInt(fld_hotel_period.getText());
+                        boolean ultraAllInclusive = cbx_ultra_all_inclusive.isSelected();
+                        boolean allInclusive = cbx_alI_inclusive.isSelected();
+                        boolean bedAndBreakfast = cbx_room_breakfast.isSelected();
+                        boolean fullBoard = cbx_full_board.isSelected();
+                        boolean halfBoard = cbx_half_board.isSelected();
+                        boolean roomOnly = cbx_room_only.isSelected();
+                        boolean nonAlcoholFull = cbx_alcohol_free.isSelected();
+                        if (deleteBoardTypesByHotelID(hotelID, ultraAllInclusive, allInclusive, bedAndBreakfast, fullBoard, halfBoard, roomOnly, nonAlcoholFull)) {
+                            Helper.showMsg("done");
+                            loadBoardModel(fld_hotel_period.getText());
+                        } else {
+                            Helper.showMsg("error");
+                        }
+                    }
+                } else {
+                    Helper.showMsg("Lütfen pansiyon tipi silmek istediğiniz oteli seçiniz!");
+                }
             }
         });
     }
@@ -535,7 +611,7 @@ public class CardHotelPanel extends JPanel {
         this.fld_hotel_period.setText(fld_hotel_period);
     }
 
-    public void loadPeriodComboBox(int id){
+    public void loadPeriodComboBox(int id) {
         chbx_period_list.removeAllItems();
         for (Period obj : Period.getPeriodsForHotel(String.valueOf(id))) {
             chbx_period_list.addItem(new Item(obj.getPeriodId(), obj.getPeriodName()));
@@ -545,6 +621,96 @@ public class CardHotelPanel extends JPanel {
     public void revalidateAll() {
         revalidate();
         repaint();
+    }
+
+    public static boolean addBoardTypesByHotelID(int hotelID, boolean ultraAllInclusive, boolean allInclusive, boolean bedAndBreakfast, boolean fullBoard, boolean halfBoard, boolean roomOnly, boolean nonAlcoholFull) {
+        try {
+            if (ultraAllInclusive) {
+                int ultraAllInclusiveID = 1;
+                addBoardTypeByHotelID(hotelID, ultraAllInclusiveID);
+            }
+
+            if (allInclusive) {
+                int allInclusiveID = 2;
+                addBoardTypeByHotelID(hotelID, allInclusiveID);
+            }
+
+            if (bedAndBreakfast) {
+                int bedAndBreakfastID = 3;
+                addBoardTypeByHotelID(hotelID, bedAndBreakfastID);
+            }
+
+            if (fullBoard) {
+                int fullBoardID = 4;
+                addBoardTypeByHotelID(hotelID, fullBoardID);
+            }
+
+            if (halfBoard) {
+                int halfBoardID = 5;
+                addBoardTypeByHotelID(hotelID, halfBoardID);
+            }
+
+            if (roomOnly) {
+                int roomOnlyID = 6;
+                addBoardTypeByHotelID(hotelID, roomOnlyID);
+            }
+
+            if (nonAlcoholFull) {
+                int nonAlcoholFullID = 7;
+                addBoardTypeByHotelID(hotelID, nonAlcoholFullID);
+            }
+
+            return true; // Ekleme işlemi başarılıysa true döndürün.
+
+        } catch (Exception e) {
+            // Hata durumunda false döndürün veya hata işlemlerini gerçekleştirin.
+            return false;
+        }
+    }
+
+    public static boolean deleteBoardTypesByHotelID(int hotelID, boolean ultraAllInclusive, boolean allInclusive, boolean bedAndBreakfast, boolean fullBoard, boolean halfBoard, boolean roomOnly, boolean nonAlcoholFull) {
+        try {
+            if (ultraAllInclusive) {
+                int ultraAllInclusiveID = 1;
+                deleteBoardTypes(hotelID, ultraAllInclusiveID);
+            }
+
+            if (allInclusive) {
+                int allInclusiveID = 2;
+                deleteBoardTypes(hotelID, allInclusiveID);
+            }
+
+            if (bedAndBreakfast) {
+                int bedAndBreakfastID = 3;
+                deleteBoardTypes(hotelID, bedAndBreakfastID);
+            }
+
+            if (fullBoard) {
+                int fullBoardID = 4;
+                deleteBoardTypes(hotelID, fullBoardID);
+            }
+
+            if (halfBoard) {
+                int halfBoardID = 5;
+                deleteBoardTypes(hotelID, halfBoardID);
+            }
+
+            if (roomOnly) {
+                int roomOnlyID = 6;
+                deleteBoardTypes(hotelID, roomOnlyID);
+            }
+
+            if (nonAlcoholFull) {
+                int nonAlcoholFullID = 7;
+                deleteBoardTypes(hotelID, nonAlcoholFullID);
+            }
+
+            return true; // Ekleme işlemi başarılıysa true döndürün.
+
+        } catch (Exception e) {
+            // Hata durumunda false döndürün veya hata işlemlerini gerçekleştirin.
+            return false;
+        }
     }
 
 }

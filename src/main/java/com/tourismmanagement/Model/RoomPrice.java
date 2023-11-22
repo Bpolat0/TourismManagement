@@ -151,33 +151,55 @@ public class RoomPrice {
         }
     }
 
-    public static void update(int id, int room_id, int period_id, int board_type_id, double adult_price, double child_price) {
-        String query = "UPDATE room_prices SET room_id = ?, period_id = ?, board_types_id = ?, adult_price = ?, child_price = ? WHERE id = ?";
-        try {
-            PreparedStatement pr = DBConnector.getInstance().prepareStatement(query);
-            pr.setInt(1, room_id);
-            pr.setInt(2, period_id);
-            pr.setInt(3, board_type_id);
-            pr.setDouble(4, adult_price);
-            pr.setDouble(5, child_price);
-            pr.setInt(6, id);
-            pr.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public static boolean update(int room_id, int period_id, int board_type_id, double adult_price, double child_price) {
+        String query = "UPDATE room_prices SET adult_price = ?, child_price = ? WHERE room_id = ? AND period_id = ? AND board_types_id = ?";
 
-    }
-
-    public static void delete(int id) {
-        String query = "DELETE FROM room_prices WHERE id = ?";
         try {
-            PreparedStatement pr = DBConnector.getInstance().prepareStatement(query);
-            pr.setInt(1, id);
-            pr.executeUpdate();
+            PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
+            pst.setDouble(1, adult_price);
+            pst.setDouble(2, child_price);
+            pst.setInt(3, room_id);
+            pst.setInt(4, period_id);
+            pst.setInt(5, board_type_id);
+
+            int response = pst.executeUpdate();
+            pst.close();
+
+            if (response == -1) {
+                Helper.showMsg("Güncelleme sırasında hata oluştu.");
+            } else {
+                Helper.showMsg("Fiyatlar başarıyla güncellendi.");
+            }
+            return response != -1;
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
+
+
+    public static boolean deletePrices(int room_id, int period_id, int board_type_id) {
+        String query = "DELETE FROM room_prices WHERE room_id = ? AND period_id = ? AND board_types_id = ?";
+
+        try {
+            PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
+            pst.setInt(1, room_id);
+            pst.setInt(2, period_id);
+            pst.setInt(3, board_type_id);
+
+            int response = pst.executeUpdate();
+            pst.close();
+
+            if (response == -1) {
+                Helper.showMsg("Silme işlemi sırasında hata oluştu.");
+            } else {
+                Helper.showMsg("Fiyat başarıyla silindi.");
+            }
+            return response != -1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public static boolean getFetch(int roomId, int periodId, int boardTypeId) {
         String query = "SELECT COUNT(*) FROM room_prices WHERE room_id = ? AND period_id = ? AND board_types_id = ?";
