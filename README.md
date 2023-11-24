@@ -64,8 +64,7 @@ Keşfetmekte özgürsünüz, herhangi bir geri bildiriminiz veya öneriniz varsa
 
 *Üye Giriş Arayüzü*
 
-<img src="src/media/login_dark.png" alt="Diagram_1" width="400" />
-<img src="src/media/login_light.png" alt="Diagram_1" width="400" />
+<img src="src/media/login_dark.png" alt="Diagram_1" width="400" /><img src="src/media/login_light.png" alt="Diagram_1" width="400" />
 
 *Giriş Arayüzü*
 
