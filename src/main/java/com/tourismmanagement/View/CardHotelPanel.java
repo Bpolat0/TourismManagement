@@ -271,7 +271,7 @@ public class CardHotelPanel extends JPanel {
                 int id = (int) tbl_hotel_list.getValueAt(tbl_hotel_list.getSelectedRow(), 0);
                 System.out.println(id);
                 // delete metodunu çağıralım
-                if (Hotel.delete(id)) {
+                if (Hotel.delete(id) && Period.deletePeriodsForHotel(id) && BoardType.deleteBoardTypesForHotel(id)) {
                     Helper.showMsg("done");
                     clearHotelAddPanel();
                     loadHotelModel();
@@ -366,6 +366,8 @@ public class CardHotelPanel extends JPanel {
                         boolean roomOnly = cbx_room_only.isSelected();
                         boolean nonAlcoholFull = cbx_alcohol_free.isSelected();
                         if (deleteBoardTypesByHotelID(hotelID, ultraAllInclusive, allInclusive, bedAndBreakfast, fullBoard, halfBoard, roomOnly, nonAlcoholFull)) {
+                            clearHotelAddPanel();
+                            Hotel.update(hotelID, fld_hotel_name.getText(), fld_hotel_country.getText(), fld_hotel_region.getText(), fld_hotel_address.getText(), fld_hotel_email.getText(), fld_hotel_phone.getText(), getSelectedRadioButtonText(btn_group_star), cbx_free_parking.isSelected(), cbx_free_wifi.isSelected(), cbx_swimming_pool.isSelected(), cbx_fitness_center.isSelected(), cbx_hotel_concierge.isSelected(), cbx_spa.isSelected(), cbx_room_service.isSelected(), cbx_ultra_all_inclusive.isSelected(), cbx_alI_inclusive.isSelected(), cbx_room_breakfast.isSelected(), cbx_full_board.isSelected(), cbx_half_board.isSelected(), cbx_room_only.isSelected(), cbx_alcohol_free.isSelected());
                             Helper.showMsg("done");
                             loadBoardModel(fld_hotel_period.getText());
                         } else {
@@ -378,6 +380,7 @@ public class CardHotelPanel extends JPanel {
             }
         });
     }
+
 
     private void loadPeriodModel(String id) {
         DefaultTableModel clearModel = (DefaultTableModel) tbl_period.getModel();

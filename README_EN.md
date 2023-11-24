@@ -1,98 +1,97 @@
-# Otel Yönetim Projesi
+# Hotel Management Project
 
-## Başka Dillerde Oku :books:
+## Readme in Other Languages :books:
 
 - :tr: [Türkçe](README.md)
 - :uk: [English](README_EN.md)
 
-## Teknolojiler
+## Technology Stack
 
 <p align="center">
     <img src="https://skillicons.dev/icons?i=java,mysql,php,idea,maven,git,github" height="75" />
 </p>
 
-## Giriş
 
-Bu proje, otel yönetimi için geliştirilmiş bir sistemdir. Otel Yönetim Projesi, otel işletmelerinin günlük
-operasyonlarını etkin bir şekilde yönetmeyi hedefleyen kapsamlı bir yazılım çözümüdür. Bu projenin amacı, otel
-sahiplerine ve yöneticilerine müşteri rezervasyonları, odaların durumu, fiyatlandırma ve genel otel işleyişi konusunda
-güçlü bir kontrol sağlamaktır.
+## Introduction
+This project is a system developed for hotel management. The Hotel Management Project is a comprehensive software solution aimed at effectively managing the daily operations of hotel businesses. The goal of this project is to provide hotel owners and managers with robust control over customer reservations, room status, pricing, and overall hotel operations.
 
-NOT: GELİŞTİRME SÜRECİ DEVAM ETMEKTEDİR.
+NOTE: THE DEVELOPMENT PROCESS IS ONGOING.
 
-Bu proje, geniş kapsamlı bir JDBC öğrenme projesidir. Projede öncelikli olarak giriş sistemi üzerinde durulmuş olup
-çalışanlar ve yöneticiler için ayrı yönetim ekranları sunmaktadır.
+This project is an extensive JDBC learning project. The project primarily focuses on a login system, providing separate management screens for employees and administrators.
 
-### Proje Genel Bakışı
+### Project Overview
 
-- **Giriş Sistemi:** Çalışanlar ve yöneticiler için ayrı yönetim arayüzleri.
-- **Çalışan Bölümü:**
-    - Her otel için özelleştirilebilir mevsimsel tarih aralıkları ve pansiyonlarla otel ekleyebilme yeteneği.
-    - Farklı tiplerde ve miktarlarda odaların otellere eklenmesine olanak tanıyan detaylı oda ekleme işlevselliği.
-    - İlişkilendirilmiş pansiyonlar, mevsimsel aralıklar ve oda tiplerine dayalı detaylı fiyatlandırma bölümü.
-    - Şehre ve misafir sayısına göre uygun odaları listeleme ve rezervasyon yapma yeteneği.
-    - Rezervasyon yapıldığında otomatik fiyat hesaplama ve odanın stokunun azalması.
-    - Oda tiplerinin mevcudiyeti, rezervasyon sayıları, karlar gibi pasta dilim grafikleri ve kayıtlı oteller için bir
-      rezervasyon tablosu sunan bir kontrol paneli.
-- **Yönetici Bölümü:**
-    - Kayıtlı tüm kullanıcıların yönetimi.
-- **Kullanıcı Arayüzü:**
-    - Gece ve gündüz modları için ışık ve karanlık tema seçeneklerine sahip kullanıcı dostu bir arayüz.
-- **Kullanılan Teknolojiler:**
-    - Java, JDBC ile veritabanı bağlantısı.
-    - Veritabanı yönetimi için MySQL ve phpMyAdmin kullanımı.
-    - IDE olarak IntelliJ IDEA.
-    - Kullanıcı arayüzü için JavaSwing.
-    - Maven kullanıldı.
+- **Login System:** Separate management interfaces for employees and administrators.
 
-## Kullanım
+- **Employee Section:**
+    - Ability to add hotels with customizable seasonal date ranges and meal plans for each hotel.
+    - Detailed room addition functionality allowing different types and quantities of rooms to be added to hotels.
+    - Room pricing section for detailed pricing based on associated meal plans, seasonal ranges, and room types.
+    - Reservation functionality enabling the listing of available rooms based on city and guest count, allowing room bookings.
+    - Automatic price calculation upon reservation, decreasing room inventory upon booking.
+    - Dashboard presenting graphical representations such as pie charts displaying room type availability, reservation counts, profits, and a reservation table for registered hotels.
+- **Admin Section:**
+    - User management for all registered users.
+- **User Interface:**
+    - Emphasis on a user-friendly interface, featuring a toggle switch for light and dark themes, providing day and night mode options.
+- **Technology Stack:**
+    - Java, JDBC for database connectivity.
+    - Utilization of MySQL and phpMyAdmin for database management.
+    - IntelliJ IDEA as the IDE.
+    - JavaSwing for the user interface.
+    - Maven for dependency management.
+    - Git for version control.
+    - GitHub for project hosting.
 
-1. Proje dosyalarını klonlayın veya indirin.
-2. MySQL veritabanı dosyasını phpMyAdmin sunucunuza yükleyin.
-3. Java IDE'si ile projeyi açın (IntelliJ IDEA, Eclipse vb.).
-4. IDE'de proje dosyalarını açtıktan sonra, `LoginGUI.java` dosyasını bulup çalıştırın.
+## How to Use
 
-### Temalar Hakkında Not
+1. Clone or download the project files.
+2. Upload the MySQL database file to your phpMyAdmin server.
+3. Open the project with a Java IDE (such as IntelliJ IDEA, Eclipse, etc.).
+4. After opening the project files in the IDE, locate and run the `LoginGUI.java` file.
 
-Farklı arayüz deneyimleri için ışık ve karanlık temalar arasında geçiş yapabilirsiniz.
+### Note on Themes
 
-Bu proje, veritabanı yönetimi için MySQL ve phpMyAdmin'i yoğun bir şekilde kullandı.
+You can switch between light and dark themes using the toggle button for different interface experiences.
 
-Keşfetmekte özgürsünüz, herhangi bir geri bildiriminiz veya öneriniz varsa lütfen paylaşın!
+This project has extensively utilized MySQL and phpMyAdmin for database management.
 
-## Proje Ekran Görüntüleri
+Feel free to explore and provide any feedback or suggestions!
 
-*Üye Giriş Arayüzü*
+
+## Project Screenshots
+
+*Login Interface*
 
 <img src="src/media/login_dark.png" alt="Diagram_1" width="400" />
 <img src="src/media/login_light.png" alt="Diagram_1" width="400" />
 
-*Giriş Arayüzü*
+*Landing Page*
 
 <img src="src/media/dashboard_dark.png" alt="Diagram_1" width="400" /> 
 <img src="src/media/dashboard_light.png" alt="Diagram_1" width="400" />
 
-*Yönetici Arayüzü*
+*Admin Panel*
 
 <img src="src/media/admin_panel_dark.png" alt="Diagram_1" width="400" />
 <img src="src/media/admin_panel_light.png" alt="Diagram_1" width="400" />
 
-*Otel Arayüzü*
+*Hotel Panel*
 
 <img src="src/media/hotel_panel_dark.png" alt="Diagram_1" width="400" />
 <img src="src/media/hotel_panel_light.png" alt="Diagram_1" width="400" />
 
-*Oda Arayüzü*
+*Room Panel*
 
 <img src="src/media/room_panel_dark.png" alt="Diagram_1" width="400" />
 <img src="src/media/room_panel_light.png" alt="Diagram_1" width="400" />
 
-*Oda Fiyat Arayüzü*
+*Room Prices Panel*
 
 <img src="src/media/prices_panel_dark.png" alt="Diagram_1" width="400" />
 <img src="src/media/prices_panel_light.png" alt="Diagram_1" width="400" />
 
-*Rezervasyon Arayüzü*
+*Reservation Panel*
 
 <img src="src/media/reservation_panel_dark.png" alt="Diagram_1" width="400" />
 <img src="src/media/reservation_panel_light.png" alt="Diagram_1" width="400" />
@@ -101,23 +100,19 @@ Keşfetmekte özgürsünüz, herhangi bir geri bildiriminiz veya öneriniz varsa
 
 <img src="src/media/DBDiagram.png" alt="Diagram_1" width="1000" />
 
-# Proje Veritabanı Tabloları
+# Project Tables
 
-## Pansiyon Tipleri Tablosu
+## Board Type Table
 
-### Tablo Oluşturma
-
+### Table Creation
 ```sql
-CREATE TABLE `board_types`
-(
+CREATE TABLE `board_types`(
     `id`              int(11) NOT NULL,
     `board_type_name` varchar(255) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
-
-### Pansiyon Tipleri Tablosu için Örnek Veri Ekleme
-
+### Sample Data Insertion for Hotel Table
 ```sql
 INSERT INTO `board_types` (`id`, `board_type_name`)
 VALUES (1, 'Ultra Herşey Dahil'),
@@ -130,41 +125,37 @@ VALUES (1, 'Ultra Herşey Dahil'),
 
 ```
 
-## Otel Tablosu
+## Hotel Table
 
-### Tablo Oluşturma
-
+### Table Creation
 ```sql
-CREATE TABLE `hotels`
-(
-    `id`                int(11) NOT NULL,
-    `name`              varchar(255) NOT NULL,
-    `city`              varchar(100) NOT NULL,
-    `region`            varchar(100) DEFAULT NULL,
-    `address`           text         DEFAULT NULL,
-    `email`             varchar(100) DEFAULT NULL,
-    `phone`             varchar(20)  DEFAULT NULL,
-    `star`              varchar(11)  DEFAULT NULL,
-    `freePark`          tinyint(1) NOT NULL,
-    `freeWifi`          tinyint(1) NOT NULL,
-    `swimmingPool`      tinyint(1) NOT NULL,
-    `fitnessCenter`     tinyint(1) NOT NULL,
-    `hotelConcierge`    tinyint(1) NOT NULL,
-    `spa`               tinyint(1) NOT NULL,
-    `roomService`       tinyint(1) NOT NULL,
-    `ultraAllInclusive` tinyint(1) NOT NULL,
-    `allInclusive`      tinyint(1) NOT NULL,
-    `bedAndBreakfast`   tinyint(1) NOT NULL,
-    `fullBoard`         tinyint(1) NOT NULL,
-    `halfBoard`         tinyint(1) NOT NULL,
-    `roomOnly`          tinyint(1) NOT NULL,
-    `nonAlcoholFull`    tinyint(1) NOT NULL,
-    PRIMARY KEY (`id`)
+CREATE TABLE `hotels` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `city` varchar(100) NOT NULL,
+  `region` varchar(100) DEFAULT NULL,
+  `address` text DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `star` varchar(11) DEFAULT NULL,
+  `freePark` tinyint(1) NOT NULL,
+  `freeWifi` tinyint(1) NOT NULL,
+  `swimmingPool` tinyint(1) NOT NULL,
+  `fitnessCenter` tinyint(1) NOT NULL,
+  `hotelConcierge` tinyint(1) NOT NULL,
+  `spa` tinyint(1) NOT NULL,
+  `roomService` tinyint(1) NOT NULL,
+  `ultraAllInclusive` tinyint(1) NOT NULL,
+  `allInclusive` tinyint(1) NOT NULL,
+  `bedAndBreakfast` tinyint(1) NOT NULL,
+  `fullBoard` tinyint(1) NOT NULL,
+  `halfBoard` tinyint(1) NOT NULL,
+  `roomOnly` tinyint(1) NOT NULL,
+  `nonAlcoholFull` tinyint(1) NOT NULL,
+   PRIMARY KEY (`id`) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
-
-### Otel Tablosu için Örnek Veri Ekleme
-
+### Sample Data Insertion for Hotel Table
 ```sql
 INSERT INTO `hotels` (`id`, `name`, `city`, `region`, `address`, `email`, `phone`, `star`, `freePark`, `freeWifi`,
                       `swimmingPool`, `fitnessCenter`, `hotelConcierge`, `spa`, `roomService`, `ultraAllInclusive`,
@@ -179,25 +170,21 @@ VALUES (1, 'Rixos Premium Belek', 'Antalya', 'Belek', 'Belek, Ileribaşı Mevkii
        (4, 'Four Seasons Hotel Istanbul', 'Istanbul', 'Besiktas', 'Ciragan Caddesi No:28, Besiktas, 34349 Istanbul',
         'fourseasonsistanbul@fourseasons.com', '02123102030', '2', 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0);
 ```
+## Hotel Board Types Table
 
-## Otel Pansiyon Tipi Tablosu
-
-### Tablo Oluşturma
-
+### Table Creation
 ```sql
 CREATE TABLE `hotel_boardtypes`
 (
     `id`            int(11) NOT NULL,
     `hotel_id`      int(11) DEFAULT NULL,
     `board_type_id` int(11) NOT NULL,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (`board_type_id`) REFERENCES `board_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+     PRIMARY KEY (`id`),
+     FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+     FOREIGN KEY (`board_type_id`) REFERENCES `board_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
-
-### Otel Pansiyon Tipi Tablosu için Örnek Veri Ekleme
-
+### Sample Data Insertion for Hotel Board Type Table
 ```sql
 INSERT INTO `hotel_boardtypes` (`id`, `hotel_id`, `board_type_id`)
 VALUES (1, 1, 1),
@@ -209,11 +196,9 @@ VALUES (1, 1, 1),
        (20, 3, 3),
        (21, 4, 6);
 ```
+## Periods Table
 
-## Mevsimler/Sezonlar Tablosu
-
-### Tablo Oluşturma
-
+### Table Creation
 ```sql
 CREATE TABLE `periods`
 (
@@ -226,9 +211,7 @@ CREATE TABLE `periods`
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ```
-
-### Mevsimler/Sezonlar Tablosu için Örnek Veri Ekleme
-
+### Sample Data Insertion for Pediods Table
 ```sql
 INSERT INTO `periods` (`period_id`, `hotel_id`, `start_date`, `end_date`, `period_name`)
 VALUES (1, 1, '2024-03-01', '2024-08-31', 'Yaz'),
@@ -244,11 +227,9 @@ VALUES (1, 1, '2024-03-01', '2024-08-31', 'Yaz'),
        (27, 4, '2024-03-01', '2024-05-31', 'İlkbahar sezonu'),
        (28, 4, '2024-06-01', '2024-08-31', 'Yaz sezonu');
 ```
+## Room Table
 
-## Oda Tipleri Tablosu
-
-### Tablo Oluşturma
-
+### Table Creation
 ```sql
 CREATE TABLE `rooms`
 (
@@ -266,15 +247,13 @@ CREATE TABLE `rooms`
     `projection`     tinyint(1) NOT NULL,
     `board_type_id`  int(11) DEFAULT NULL,
     PRIMARY KEY (`id`),
-    KEY              `rooms_ibfk_1` (`hotel_id`),
-    KEY              `rooms_ibfk_2` (`board_type_id`),
+    KEY `rooms_ibfk_1` (`hotel_id`),
+    KEY `rooms_ibfk_2` (`board_type_id`),
     CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `rooms_ibfk_2` FOREIGN KEY (`board_type_id`) REFERENCES `board_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
-
-### Oda Tipleri Tablosu için Örnek Veri Ekleme
-
+### Sample Data Insertion for Room Table
 ```sql
 INSERT INTO `rooms` (`id`, `hotel_id`, `room_type`, `stock_quantity`, `bed_quantity`, `meter_square`, `television`,
                      `minibar`, `game_console`, `safe`, `projection`)
@@ -288,11 +267,9 @@ VALUES (16, 1, 'Tek', 10, 1, 50, 1, 0, 0, 1, 0),
        (27, 3, 'Suit', 5, 4, 100, 1, 1, 1, 1, 1),
        (28, 4, 'Tek', 10, 1, 50, 1, 0, 0, 1, 0);
 ```
+## Room Prices Table
 
-## Oda Fiyatları Tablosu
-
-### Tablo Oluşturma
-
+### Table Creation
 ```sql
 CREATE TABLE `room_prices`
 (
@@ -309,9 +286,7 @@ CREATE TABLE `room_prices`
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ```
-
-### Oda Fiyatları Tablosu için Örnek Veri Ekleme
-
+### Sample Data Insertion for Room Prices Table
 ```sql
 INSERT INTO `room_prices` (`id`, `room_id`, `period_id`, `board_types_id`, `adult_price`, `child_price`)
 VALUES (1, 16, 1, 1, 557.31, 286.64),
@@ -369,10 +344,9 @@ VALUES (1, 16, 1, 1, 557.31, 286.64),
 
 ```
 
-## Rezervasyon Tablosu
+## Reservation Table
 
-### Tablo Oluşturma
-
+### Table Creation
 ```sql
 CREATE TABLE `reservations`
 (
@@ -393,10 +367,9 @@ CREATE TABLE `reservations`
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
 
-## Kullanıcılar Tablosu
+## User Table
 
-### Tablo Oluşturma
-
+### Table Creation
 ```sql
 CREATE TABLE `user`
 (
@@ -408,9 +381,7 @@ CREATE TABLE `user`
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ```
-
-### Kullanıcılar Tablosu için Örnek Veri Ekleme
-
+### Sample Data Insertion for User Table
 ```sql
 INSERT INTO `user` (`id`, `name`, `uname`, `pass`, `type`)
 VALUES (1, 'Admin', 'Admin', '123', 'Admin'),
@@ -419,9 +390,9 @@ VALUES (1, 'Admin', 'Admin', '123', 'Admin'),
 
 ## License
 
-Bu proje MIT lisansı ile lisanslanmıştır. Daha fazla bilgi için [LICENSE](LICENSE) dosyasına bakın.
+This project is licensed under the MIT License. Refer to the `LICENSE` file for more information.
 
-## İletişim
+## Contact
 
 <p align="center">
   <a href="https://github.com/Bpolat0">
@@ -429,13 +400,9 @@ Bu proje MIT lisansı ile lisanslanmıştır. Daha fazla bilgi için [LICENSE](L
 
   <a href="https://discord.com/users/m.batuhanpolat">
     <img src="https://skillicons.dev/icons?i=discord" height="75" />
-    
+
   <a href="https://www.linkedin.com/in/mehmetbatuhanpolat/">
     <img src="https://skillicons.dev/icons?i=linkedin" height="75" />
   </a>
 </p>
-
-
-
-
 

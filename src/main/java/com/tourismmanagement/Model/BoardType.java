@@ -28,7 +28,6 @@ public class BoardType {
     }
 
 
-
     public int getId() {
         return id;
     }
@@ -248,6 +247,19 @@ public class BoardType {
         }
 
         return pansiyonTipleri;
+    }
+
+    public static boolean deleteBoardTypesForHotel(int id) {
+        String query = "DELETE FROM hotel_boardtypes WHERE hotel_id = ?";
+        try {
+            PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+            pst.close();
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

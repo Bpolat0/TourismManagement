@@ -150,6 +150,7 @@ public class CardReservation extends JPanel {
 
         btn_show_all_room.addActionListener(e -> {
             loadroommodel();
+            Helper.showMsg("Sistem de kayıtlı olan tüm odalar listelendi. Rezervasyon yapmak için lütfen özel arama seçeneğini kullanınız. Bu buton sadece sistemde kayıtlı olan tüm odaları listelemek için kullanılır.");
         });
     }
 
@@ -356,6 +357,8 @@ public class CardReservation extends JPanel {
         roomList.clear();
         loadRoomSearchModel(city, startDate, endDate, adultCount, childCount);
     }
+
+
 
     private void loadRoomSearchModel(String city, Date startDate, Date endDate, int adultCount, int childCount) {
         DefaultTableModel clearModel = (DefaultTableModel) tbl_room_list.getModel();

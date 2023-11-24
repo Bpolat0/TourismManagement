@@ -30,6 +30,8 @@ public class Period {
         this.periodName = periodName;
     }
 
+
+
     public int getPeriodId() {
         return periodId;
     }
@@ -268,6 +270,18 @@ public class Period {
 
     public static boolean delete(int id) {
         String query = "DELETE FROM periods WHERE period_id = ?";
+        try {
+            PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
+            pst.setInt(1, id);
+            int response = pst.executeUpdate();
+            return response != -1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static boolean deletePeriodsForHotel(int id) {
+        String query = "DELETE FROM periods WHERE hotel_id = ?";
         try {
             PreparedStatement pst = DBConnector.getInstance().prepareStatement(query);
             pst.setInt(1, id);

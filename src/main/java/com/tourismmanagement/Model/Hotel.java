@@ -2,6 +2,8 @@ package com.tourismmanagement.Model;
 
 import com.tourismmanagement.Helper.DBConnector;
 import com.tourismmanagement.Helper.Helper;
+import com.tourismmanagement.View.CardHotelPanel;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -302,7 +304,7 @@ public class Hotel {
             return false;
         }
         try {
-            PreparedStatement pr = DBConnector.getInstance().prepareStatement(query);
+            PreparedStatement pr = DBConnector.getInstance().prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pr.setString(1, name);
             pr.setString(2, city);
             pr.setString(3, region);
@@ -326,6 +328,12 @@ public class Hotel {
             pr.setBoolean(21, nonAlcoholFull);
             int response = pr.executeUpdate();
 
+            ResultSet generatedKeys = pr.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                int hotelID = generatedKeys.getInt(1);
+                CardHotelPanel.addBoardTypesByHotelID(hotelID, ultraAllInclusive, allInclusive, bedAndBreakfast, fullBoard, halfBoard, roomOnly, nonAlcoholFull);
+                Helper.showMsg("Otel eklendi!");
+            }
             //close connection
             pr.close();
 
@@ -407,7 +415,6 @@ public class Hotel {
             pr.setInt(22, id);
 
             int response = pr.executeUpdate();
-
             //close connection
             pr.close();
 
