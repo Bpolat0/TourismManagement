@@ -11,13 +11,17 @@
     <img src="https://skillicons.dev/icons?i=java,mysql,php,idea,maven,git,github" height="75" />
 </p>
 
-
 ## Introduction
-This project is a system developed for hotel management. The Hotel Management Project is a comprehensive software solution aimed at effectively managing the daily operations of hotel businesses. The goal of this project is to provide hotel owners and managers with robust control over customer reservations, room status, pricing, and overall hotel operations.
+
+This project is a system developed for hotel management. The Hotel Management Project is a comprehensive software
+solution aimed at effectively managing the daily operations of hotel businesses. The goal of this project is to provide
+hotel owners and managers with robust control over customer reservations, room status, pricing, and overall hotel
+operations.
 
 NOTE: THE DEVELOPMENT PROCESS IS ONGOING.
 
-This project is an extensive JDBC learning project. The project primarily focuses on a login system, providing separate management screens for employees and administrators.
+This project is an extensive JDBC learning project. The project primarily focuses on a login system, providing separate
+management screens for employees and administrators.
 
 ### Project Overview
 
@@ -27,13 +31,16 @@ This project is an extensive JDBC learning project. The project primarily focuse
     - Ability to add hotels with customizable seasonal date ranges and meal plans for each hotel.
     - Detailed room addition functionality allowing different types and quantities of rooms to be added to hotels.
     - Room pricing section for detailed pricing based on associated meal plans, seasonal ranges, and room types.
-    - Reservation functionality enabling the listing of available rooms based on city and guest count, allowing room bookings.
+    - Reservation functionality enabling the listing of available rooms based on city and guest count, allowing room
+      bookings.
     - Automatic price calculation upon reservation, decreasing room inventory upon booking.
-    - Dashboard presenting graphical representations such as pie charts displaying room type availability, reservation counts, profits, and a reservation table for registered hotels.
+    - Dashboard presenting graphical representations such as pie charts displaying room type availability, reservation
+      counts, profits, and a reservation table for registered hotels.
 - **Admin Section:**
     - User management for all registered users.
 - **User Interface:**
-    - Emphasis on a user-friendly interface, featuring a toggle switch for light and dark themes, providing day and night mode options.
+    - Emphasis on a user-friendly interface, featuring a toggle switch for light and dark themes, providing day and
+      night mode options.
 - **Technology Stack:**
     - Java, JDBC for database connectivity.
     - Utilization of MySQL and phpMyAdmin for database management.
@@ -57,7 +64,6 @@ You can switch between light and dark themes using the toggle button for differe
 This project has extensively utilized MySQL and phpMyAdmin for database management.
 
 Feel free to explore and provide any feedback or suggestions!
-
 
 ## Project Screenshots
 
@@ -105,14 +111,18 @@ Feel free to explore and provide any feedback or suggestions!
 ## Board Type Table
 
 ### Table Creation
+
 ```sql
-CREATE TABLE `board_types`(
+CREATE TABLE `board_types`
+(
     `id`              int(11) NOT NULL,
     `board_type_name` varchar(255) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
+
 ### Sample Data Insertion for Hotel Table
+
 ```sql
 INSERT INTO `board_types` (`id`, `board_type_name`)
 VALUES (1, 'Ultra Herşey Dahil'),
@@ -128,34 +138,38 @@ VALUES (1, 'Ultra Herşey Dahil'),
 ## Hotel Table
 
 ### Table Creation
+
 ```sql
-CREATE TABLE `hotels` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `city` varchar(100) NOT NULL,
-  `region` varchar(100) DEFAULT NULL,
-  `address` text DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `phone` varchar(20) DEFAULT NULL,
-  `star` varchar(11) DEFAULT NULL,
-  `freePark` tinyint(1) NOT NULL,
-  `freeWifi` tinyint(1) NOT NULL,
-  `swimmingPool` tinyint(1) NOT NULL,
-  `fitnessCenter` tinyint(1) NOT NULL,
-  `hotelConcierge` tinyint(1) NOT NULL,
-  `spa` tinyint(1) NOT NULL,
-  `roomService` tinyint(1) NOT NULL,
-  `ultraAllInclusive` tinyint(1) NOT NULL,
-  `allInclusive` tinyint(1) NOT NULL,
-  `bedAndBreakfast` tinyint(1) NOT NULL,
-  `fullBoard` tinyint(1) NOT NULL,
-  `halfBoard` tinyint(1) NOT NULL,
-  `roomOnly` tinyint(1) NOT NULL,
-  `nonAlcoholFull` tinyint(1) NOT NULL,
-   PRIMARY KEY (`id`) 
+CREATE TABLE `hotels`
+(
+    `id`                int(11) NOT NULL,
+    `name`              varchar(255) NOT NULL,
+    `city`              varchar(100) NOT NULL,
+    `region`            varchar(100) DEFAULT NULL,
+    `address`           text         DEFAULT NULL,
+    `email`             varchar(100) DEFAULT NULL,
+    `phone`             varchar(20)  DEFAULT NULL,
+    `star`              varchar(11)  DEFAULT NULL,
+    `freePark`          tinyint(1) NOT NULL,
+    `freeWifi`          tinyint(1) NOT NULL,
+    `swimmingPool`      tinyint(1) NOT NULL,
+    `fitnessCenter`     tinyint(1) NOT NULL,
+    `hotelConcierge`    tinyint(1) NOT NULL,
+    `spa`               tinyint(1) NOT NULL,
+    `roomService`       tinyint(1) NOT NULL,
+    `ultraAllInclusive` tinyint(1) NOT NULL,
+    `allInclusive`      tinyint(1) NOT NULL,
+    `bedAndBreakfast`   tinyint(1) NOT NULL,
+    `fullBoard`         tinyint(1) NOT NULL,
+    `halfBoard`         tinyint(1) NOT NULL,
+    `roomOnly`          tinyint(1) NOT NULL,
+    `nonAlcoholFull`    tinyint(1) NOT NULL,
+    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
+
 ### Sample Data Insertion for Hotel Table
+
 ```sql
 INSERT INTO `hotels` (`id`, `name`, `city`, `region`, `address`, `email`, `phone`, `star`, `freePark`, `freeWifi`,
                       `swimmingPool`, `fitnessCenter`, `hotelConcierge`, `spa`, `roomService`, `ultraAllInclusive`,
@@ -170,21 +184,25 @@ VALUES (1, 'Rixos Premium Belek', 'Antalya', 'Belek', 'Belek, Ileribaşı Mevkii
        (4, 'Four Seasons Hotel Istanbul', 'Istanbul', 'Besiktas', 'Ciragan Caddesi No:28, Besiktas, 34349 Istanbul',
         'fourseasonsistanbul@fourseasons.com', '02123102030', '2', 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0);
 ```
+
 ## Hotel Board Types Table
 
 ### Table Creation
+
 ```sql
 CREATE TABLE `hotel_boardtypes`
 (
     `id`            int(11) NOT NULL,
     `hotel_id`      int(11) DEFAULT NULL,
     `board_type_id` int(11) NOT NULL,
-     PRIMARY KEY (`id`),
-     FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-     FOREIGN KEY (`board_type_id`) REFERENCES `board_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`board_type_id`) REFERENCES `board_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
+
 ### Sample Data Insertion for Hotel Board Type Table
+
 ```sql
 INSERT INTO `hotel_boardtypes` (`id`, `hotel_id`, `board_type_id`)
 VALUES (1, 1, 1),
@@ -196,9 +214,11 @@ VALUES (1, 1, 1),
        (20, 3, 3),
        (21, 4, 6);
 ```
+
 ## Periods Table
 
 ### Table Creation
+
 ```sql
 CREATE TABLE `periods`
 (
@@ -211,7 +231,9 @@ CREATE TABLE `periods`
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ```
+
 ### Sample Data Insertion for Pediods Table
+
 ```sql
 INSERT INTO `periods` (`period_id`, `hotel_id`, `start_date`, `end_date`, `period_name`)
 VALUES (1, 1, '2024-03-01', '2024-08-31', 'Yaz'),
@@ -227,9 +249,11 @@ VALUES (1, 1, '2024-03-01', '2024-08-31', 'Yaz'),
        (27, 4, '2024-03-01', '2024-05-31', 'İlkbahar sezonu'),
        (28, 4, '2024-06-01', '2024-08-31', 'Yaz sezonu');
 ```
+
 ## Room Table
 
 ### Table Creation
+
 ```sql
 CREATE TABLE `rooms`
 (
@@ -247,13 +271,15 @@ CREATE TABLE `rooms`
     `projection`     tinyint(1) NOT NULL,
     `board_type_id`  int(11) DEFAULT NULL,
     PRIMARY KEY (`id`),
-    KEY `rooms_ibfk_1` (`hotel_id`),
-    KEY `rooms_ibfk_2` (`board_type_id`),
+    KEY              `rooms_ibfk_1` (`hotel_id`),
+    KEY              `rooms_ibfk_2` (`board_type_id`),
     CONSTRAINT `rooms_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `hotels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `rooms_ibfk_2` FOREIGN KEY (`board_type_id`) REFERENCES `board_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 ```
+
 ### Sample Data Insertion for Room Table
+
 ```sql
 INSERT INTO `rooms` (`id`, `hotel_id`, `room_type`, `stock_quantity`, `bed_quantity`, `meter_square`, `television`,
                      `minibar`, `game_console`, `safe`, `projection`)
@@ -267,9 +293,11 @@ VALUES (16, 1, 'Tek', 10, 1, 50, 1, 0, 0, 1, 0),
        (27, 3, 'Suit', 5, 4, 100, 1, 1, 1, 1, 1),
        (28, 4, 'Tek', 10, 1, 50, 1, 0, 0, 1, 0);
 ```
+
 ## Room Prices Table
 
 ### Table Creation
+
 ```sql
 CREATE TABLE `room_prices`
 (
@@ -286,7 +314,9 @@ CREATE TABLE `room_prices`
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ```
+
 ### Sample Data Insertion for Room Prices Table
+
 ```sql
 INSERT INTO `room_prices` (`id`, `room_id`, `period_id`, `board_types_id`, `adult_price`, `child_price`)
 VALUES (1, 16, 1, 1, 557.31, 286.64),
@@ -347,6 +377,7 @@ VALUES (1, 16, 1, 1, 557.31, 286.64),
 ## Reservation Table
 
 ### Table Creation
+
 ```sql
 CREATE TABLE `reservations`
 (
@@ -370,6 +401,7 @@ CREATE TABLE `reservations`
 ## User Table
 
 ### Table Creation
+
 ```sql
 CREATE TABLE `user`
 (
@@ -381,7 +413,9 @@ CREATE TABLE `user`
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ```
+
 ### Sample Data Insertion for User Table
+
 ```sql
 INSERT INTO `user` (`id`, `name`, `uname`, `pass`, `type`)
 VALUES (1, 'Admin', 'Admin', '123', 'Admin'),
@@ -404,5 +438,8 @@ This project is licensed under the MIT License. Refer to the `LICENSE` file for 
   <a href="https://www.linkedin.com/in/mehmetbatuhanpolat/">
     <img src="https://skillicons.dev/icons?i=linkedin" height="75" />
   </a>
+  <a href="https://app.patika.dev/bpolat">
+    <img alt="Qries" src="https://patika-prod.s3.eu-central-1.amazonaws.com/staticFiles/patikaLogo.png"
+         width="90" height="90"> </a>
 </p>
 

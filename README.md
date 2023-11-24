@@ -433,6 +433,9 @@ Bu proje MIT lisansı ile lisanslanmıştır. Daha fazla bilgi için [LICENSE](L
   <a href="https://www.linkedin.com/in/mehmetbatuhanpolat/">
     <img src="https://skillicons.dev/icons?i=linkedin" height="75" />
   </a>
+  <a href="https://app.patika.dev/bpolat">
+    <img alt="Qries" src="https://patika-prod.s3.eu-central-1.amazonaws.com/staticFiles/patikaLogo.png"
+         width="90" height="90">
 </p>
 
 
