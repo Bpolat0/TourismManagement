@@ -69,38 +69,31 @@ Feel free to explore and provide any feedback or suggestions!
 
 *Login Interface*
 
-<img src="src/media/login_dark.png" alt="Diagram_1" width="400" />
-<img src="src/media/login_light.png" alt="Diagram_1" width="400" />
+<img src="src/media/login_dark.png" alt="Diagram_1" width="400" /><img src="src/media/login_light.png" alt="Diagram_1" width="400" />
 
 *Landing Page*
 
-<img src="src/media/dashboard_dark.png" alt="Diagram_1" width="400" /> 
-<img src="src/media/dashboard_light.png" alt="Diagram_1" width="400" />
+<img src="src/media/dashboard_dark.png" alt="Diagram_1" width="400" /> <img src="src/media/dashboard_light.png" alt="Diagram_1" width="400" />
 
 *Admin Panel*
 
-<img src="src/media/admin_panel_dark.png" alt="Diagram_1" width="400" />
-<img src="src/media/admin_panel_light.png" alt="Diagram_1" width="400" />
+<img src="src/media/admin_panel_dark.png" alt="Diagram_1" width="400" /><img src="src/media/admin_panel_light.png" alt="Diagram_1" width="400" />
 
 *Hotel Panel*
 
-<img src="src/media/hotel_panel_dark.png" alt="Diagram_1" width="400" />
-<img src="src/media/hotel_panel_light.png" alt="Diagram_1" width="400" />
+<img src="src/media/hotel_panel_dark.png" alt="Diagram_1" width="400" /><img src="src/media/hotel_panel_light.png" alt="Diagram_1" width="400" />
 
 *Room Panel*
 
-<img src="src/media/room_panel_dark.png" alt="Diagram_1" width="400" />
-<img src="src/media/room_panel_light.png" alt="Diagram_1" width="400" />
+<img src="src/media/room_panel_dark.png" alt="Diagram_1" width="400" /><img src="src/media/room_panel_light.png" alt="Diagram_1" width="400" />
 
 *Room Prices Panel*
 
-<img src="src/media/prices_panel_dark.png" alt="Diagram_1" width="400" />
-<img src="src/media/prices_panel_light.png" alt="Diagram_1" width="400" />
+<img src="src/media/prices_panel_dark.png" alt="Diagram_1" width="400" /><img src="src/media/prices_panel_light.png" alt="Diagram_1" width="400" />
 
 *Reservation Panel*
 
-<img src="src/media/reservation_panel_dark.png" alt="Diagram_1" width="400" />
-<img src="src/media/reservation_panel_light.png" alt="Diagram_1" width="400" />
+<img src="src/media/reservation_panel_dark.png" alt="Diagram_1" width="400" /><img src="src/media/reservation_panel_light.png" alt="Diagram_1" width="400" />
 
 *DB Diyagramı*
 
