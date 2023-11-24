@@ -68,33 +68,27 @@ Keşfetmekte özgürsünüz, herhangi bir geri bildiriminiz veya öneriniz varsa
 
 *Giriş Arayüzü*
 
-<img src="src/media/dashboard_dark.png" alt="Diagram_1" width="400" /> 
-<img src="src/media/dashboard_light.png" alt="Diagram_1" width="400" />
+<img src="src/media/dashboard_dark.png" alt="Diagram_1" width="400" /> <img src="src/media/dashboard_light.png" alt="Diagram_1" width="400" />
 
 *Yönetici Arayüzü*
 
-<img src="src/media/admin_panel_dark.png" alt="Diagram_1" width="400" />
-<img src="src/media/admin_panel_light.png" alt="Diagram_1" width="400" />
+<img src="src/media/admin_panel_dark.png" alt="Diagram_1" width="400" /><img src="src/media/admin_panel_light.png" alt="Diagram_1" width="400" />
 
 *Otel Arayüzü*
 
-<img src="src/media/hotel_panel_dark.png" alt="Diagram_1" width="400" />
-<img src="src/media/hotel_panel_light.png" alt="Diagram_1" width="400" />
+<img src="src/media/hotel_panel_dark.png" alt="Diagram_1" width="400" /><img src="src/media/hotel_panel_light.png" alt="Diagram_1" width="400" />
 
 *Oda Arayüzü*
 
-<img src="src/media/room_panel_dark.png" alt="Diagram_1" width="400" />
-<img src="src/media/room_panel_light.png" alt="Diagram_1" width="400" />
+<img src="src/media/room_panel_dark.png" alt="Diagram_1" width="400" /><img src="src/media/room_panel_light.png" alt="Diagram_1" width="400" />
 
 *Oda Fiyat Arayüzü*
 
-<img src="src/media/prices_panel_dark.png" alt="Diagram_1" width="400" />
-<img src="src/media/prices_panel_light.png" alt="Diagram_1" width="400" />
+<img src="src/media/prices_panel_dark.png" alt="Diagram_1" width="400" /><img src="src/media/prices_panel_light.png" alt="Diagram_1" width="400" />
 
 *Rezervasyon Arayüzü*
 
-<img src="src/media/reservation_panel_dark.png" alt="Diagram_1" width="400" />
-<img src="src/media/reservation_panel_light.png" alt="Diagram_1" width="400" />
+<img src="src/media/reservation_panel_dark.png" alt="Diagram_1" width="400" /><img src="src/media/reservation_panel_light.png" alt="Diagram_1" width="400" />
 
 *DB Diyagramı*
 
